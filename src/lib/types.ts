@@ -1,0 +1,11 @@
+export type ChapterLink = { slug:string; title:string; group:string; order:number; pageStart:number|null; pageEnd:number|null; readMinutes:number };
+export type Heading = { id:string; title:string; level:number };
+export type Chapter = ChapterLink & { html:string; text:string; headings:Heading[]; figureCount:number };
+export type Book = { slug:string; title:string; subtitle:string; description:string; authors:string[]; translator?:string; publisher?:string; isbn?:string; language:string; cover:string|null; sourceNote:string; chapterCount:number; figureCount:number; chapters:Chapter[] };
+export type BookSummary = Omit<Book,'chapters'> & { chapters:ChapterLink[] };
+export type SearchEntry = { slug:string; title:string; group:string; text:string };
+export type Progress = { chapter:string; title:string; ratio:number; updated:number };
+export type BookMetadata = { slug:string; title:string; subtitle:string; description:string; authors:string[]; translator?:string; publisher?:string; isbn?:string; language:string; cover:string|null; sourceNote:string; published:boolean };
+export type ChapterDocument = { slug:string; title:string; group:string; order:number; pageStart:number|null; pageEnd:number|null; published:boolean; source:string; revision:string };
+export type BookDocument = { metadata:BookMetadata; revision:string; chapterCount:number };
+export type EditorBook = { metadata:BookMetadata; revision:string; chapters:Omit<ChapterDocument,'source'>[]; images:string[] };

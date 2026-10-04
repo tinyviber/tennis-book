@@ -1,0 +1,17 @@
+services:
+  reader:
+    build:
+      context: .
+      args:
+        BASE_PATH: ${BASE_PATH:-}
+    restart: unless-stopped
+    env_file: .env.local
+    environment:
+      DATA_DIR: /data
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - content-data:/data
+
+volumes:
+  content-data:

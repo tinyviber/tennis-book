@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+data
+content
+out
+public/books
+src/generated
+.env*
+*.tsbuildinfo
+.DS_Store

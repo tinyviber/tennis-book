@@ -1,0 +1,38 @@
+{
+  "name": "shujian-book-reader",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build --webpack",
+    "postbuild": "node scripts/clean-standalone.mjs",
+    "start": "next start",
+    "preview": "next start",
+    "check": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "init-data": "tsx scripts/init-data.ts",
+    "check-content": "tsx scripts/check-content.ts",
+    "setup-admin": "tsx scripts/setup-admin.ts",
+    "add-book": "tsx scripts/add-book.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/noto-sans-sc": "^5.2.9",
+    "@fontsource-variable/noto-serif-sc": "^5.2.8",
+    "@next/env": "^16.3.8",
+    "gray-matter": "4.0.3",
+    "image-size": "2.0.4",
+    "lucide-react": "1.51.0",
+    "markdown-it": "15.0.2",
+    "next": "16.3.8",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}
