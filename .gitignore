@@ -4,6 +4,8 @@ out/
 src/generated/
 public/books/
 *.tsbuildinfo
+__pycache__/
+*.py[cod]
 .DS_Store
 data/
 content/

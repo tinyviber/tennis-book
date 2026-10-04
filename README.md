@@ -175,3 +175,5 @@ Vercel 使用私有 Blob 的条件写入保存编辑版本，多个函数实例�
 认证校验遵循 [Next.js 认证指南](https://nextjs.org/docs/app/guides/authentication)：每个写入 API 在服务端核验会话；不是仅隐藏后台按钮。密码使用 Node.js 的 scrypt（N=32768、r=8、p=3、独立随机盐），参数参考 [OWASP 密码存储指南](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)。
 
 正文由扫描 OCR 转成 Markdown，尚未逐字校对；插图保留原书的动作、箭头和标注。裁图记录保存在各书籍的 `extraction.json`。扫描导入脚本 `scripts/import-scanned-book.py` 使用 `--data-dir` 或 `DATA_DIR` 指定目标，需要安装 `pymupdf` 与 `Pillow`；Python 脚本不自动加载 `.env.local`。字体和界面依赖的许可文本收录在 `LICENSES/`。
+
+第二本书《网球运动系统训练》的导入、图像来源和重建方式见[导入说明](docs/import-training-book.md)；结合两本书编写新手版的提案见[整合方案](docs/beginner-edition-plan.md)。
