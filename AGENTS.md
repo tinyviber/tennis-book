@@ -12,8 +12,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## App and book content
 
-- This is a Next.js App Router book reader. Read `README.md` for architecture and deployment; runtime book content is stored separately from application code.
-- Book data lives in the Git-ignored `data/` directory. This working copy currently has `tennis-improvement` (47 sections), `tennis-system-training` (93 sections, including 72 exercise entries), `tennis-footwork` (6 sections, adapted from an 8-page article), and `tennis-pressure-training` (12 sections, combining the two volumes). A fresh clone will not contain the books or source scans; check whether the relevant local data exists before assuming it can be rebuilt.
+- This is a Next.js App Router book reader. Read `README.md` for architecture and deployment; reader content lives in `data/books/` and is committed with the application.
+- The repository contains `tennis-improvement` (47 sections), `tennis-system-training` (93 sections, including 72 exercise entries), `tennis-footwork` (6 sections, adapted from an 8-page article), and `tennis-pressure-training` (12 sections, combining the two volumes). Source scans and import review materials under `data/imports/` remain local and ignored by Git.
 - Keep the two source-book editions intact and separate. The beginner-oriented cross-book proposal is in `docs/beginner-edition-plan.md`; it is an editorial plan, not permission to rewrite either source edition.
 
 ## Training-book import and editorial checks
@@ -30,4 +30,4 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 - After content or reader changes, run the relevant checks: `npm run check`, `npm test`, `npm run check-content`, and `npm run build`. `check-content` validates local data; run it separately from the build.
 - For visual changes, check both a desktop and a narrow mobile viewport, and exercise chapter navigation, search, and image zoom when affected.
-- A Git push does not include `data/` or publish book content. Vercel uses private Blob storage; when deployment requires book content, migrate from a working copy that has the data and a configured `BLOB_READ_WRITE_TOKEN` with `npm run migrate-vercel-blob`. Review `docs/import-training-book.md` and the Vercel section of `README.md` first.
+- `data/books/` is tracked by Git. The Vercel deployment reads this committed content and is read-only; edits must be committed and pushed to trigger a deployment. It does not use Vercel Blob or require content-related environment variables. Review the Vercel section of `README.md` before changing deployment behavior.

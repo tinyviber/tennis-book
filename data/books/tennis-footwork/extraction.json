@@ -1,0 +1,53 @@
+{
+  "source": "tennis淺談網球步法訓練.pdf",
+  "sha256": "ef0e922bb0ec1037ffb8a29377b217211d5e9b18966caae65b72c5eab28ea4e0",
+  "pageCount": 8,
+  "printedPageRange": [
+    71,
+    78
+  ],
+  "textExtraction": "PDF文字層提取；未使用OCR。",
+  "chineseConversion": "macOS Foundation / ICU Traditional-Simplified transform; headings 壹/貳/參/肆 normalized to 一/二/三/四; corrected ICU variant output 與生具來 to 與生俱來.",
+  "figures": 3,
+  "coordinateSystem": "pixel coordinates on 250 DPI rendered page PNGs (2068 x 2924 px), origin top-left",
+  "figureNotes": "PDF第6页图1、图2的图注压在球场图上，保留含路线箭头的下半场地区域；第7页图3保留完整图面。",
+  "pages": {
+    "76": [
+      {
+        "file": "figure-076-01.webp",
+        "page": 6,
+        "box": [
+          306,
+          1902,
+          785,
+          2290
+        ],
+        "label": "图1：沿底线向左右两侧移动"
+      },
+      {
+        "file": "figure-076-02.webp",
+        "page": 6,
+        "box": [
+          1117,
+          1902,
+          1606,
+          2292
+        ],
+        "label": "图2：从底线中点向五个方向移动"
+      }
+    ],
+    "77": [
+      {
+        "file": "figure-077-01.webp",
+        "page": 7,
+        "box": [
+          805,
+          446,
+          1270,
+          1118
+        ],
+        "label": "图3：增加方向变化的专项移动练习"
+      }
+    ]
+  }
+}

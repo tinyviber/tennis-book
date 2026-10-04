@@ -1,0 +1,17 @@
+{
+  "slug": "tennis-system-training",
+  "title": "网球运动系统训练",
+  "subtitle": "身体解剖、专项体能与步法训练",
+  "description": "从击球中的身体运动，到肩、臂、胸、背、核心、腿部、转体与步法；72个训练动作配有步骤、肌群和网球训练要点。",
+  "authors": [
+    "E.保罗·勒特尔",
+    "马克·S.科瓦奇"
+  ],
+  "translator": "孟焕丽、张晶",
+  "publisher": "人民邮电出版社",
+  "isbn": "978-7-115-37717-3",
+  "language": "zh-CN",
+  "cover": "./images/cover.webp",
+  "published": true,
+  "sourceNote": "2015年中文版扫描整理；保留原文与灰度解剖图，按阅读体验重新分节。动作标题、索引及损伤表已核对，正文尚未逐字校对。一幅步法场地图经 Image-2 清晰化，原图与处理记录均保留。"
+}

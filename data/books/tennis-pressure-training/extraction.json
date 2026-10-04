@@ -1,0 +1,2113 @@
+{
+  "sources": [
+    {
+      "volume": "upper",
+      "file": "source-upper.pdf",
+      "sha256": "bd3fe778e76b733f9dc14e1fff5d92cee60c0ce9abf1af6b238f47434207be92",
+      "pageCount": 124,
+      "printedPageMapping": "PDF page 8–124 = printed page + 7; PDF pages 1–7 are front matter"
+    },
+    {
+      "volume": "lower",
+      "file": "source-lower.pdf",
+      "sha256": "d32616cdd463c06d43ec9ae7895212e2a9ad02c6827817cf29754fdb5864234e",
+      "pageCount": 124,
+      "printedPageMapping": "PDF page = printed page − 117; printed pages 118–241"
+    }
+  ],
+  "figureCount": 100,
+  "figures": [
+    {
+      "file": "figure-001-002.webp",
+      "figureNumbers": [
+        1,
+        2
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 32,
+      "printedPage": 25,
+      "cropNormalized": [
+        0.045,
+        0.37593069961097786,
+        0.955,
+        0.8766983234886077
+      ],
+      "width": 1486,
+      "height": 1170,
+      "captionOCR": [
+        "图1 外侧正手",
+        "图2 外侧反手"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-003-004.webp",
+      "figureNumbers": [
+        3,
+        4
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 33,
+      "printedPage": 26,
+      "cropNormalized": [
+        0.045,
+        0.44570205440399385,
+        0.955,
+        0.9478424656175108
+      ],
+      "width": 1486,
+      "height": 1173,
+      "captionOCR": [
+        "图3 运动员 P1和P2在底线",
+        "图4 运动员PI用内侧"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-005-006.webp",
+      "figureNumbers": [
+        5,
+        6
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 34,
+      "printedPage": 27,
+      "cropNormalized": [
+        0.045,
+        0.439280821866831,
+        0.955,
+        0.9414212329941956
+      ],
+      "width": 1486,
+      "height": 1173,
+      "captionOCR": [
+        "图5 运动员PI和P2进行",
+        "图6运动员PI用内侧"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-007-008.webp",
+      "figureNumbers": [
+        7,
+        8
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 36,
+      "printedPage": 29,
+      "cropNormalized": [
+        0.045,
+        0.06428082203529145,
+        0.955,
+        0.56642123290973
+      ],
+      "width": 1486,
+      "height": 1173,
+      "captionOCR": [
+        "图7 外側正拍不改变线路",
+        "图8 外側反拍不改变线路"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-009-010.webp",
+      "figureNumbers": [
+        9,
+        10
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 36,
+      "printedPage": 29,
+      "cropNormalized": [
+        0.045,
+        0.4694827590162432,
+        0.955,
+        0.9694827590162431
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图 10."
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-011-012.webp",
+      "figureNumbers": [
+        11,
+        12
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 38,
+      "printedPage": 31,
+      "cropNormalized": [
+        0.045,
+        0.07498287631235151,
+        0.955,
+        0.5749828770555248
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图12 运动员 P1反手90°变线",
+        "图11 运动员 PI正手90°变线"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-013.webp",
+      "figureNumbers": [
+        13
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 39,
+      "printedPage": 32,
+      "cropNormalized": [
+        0.045,
+        0.4542636986248038,
+        0.955,
+        0.9542636986248039
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图13 运动员 P1的内侧正手不变线击球"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-014.webp",
+      "figureNumbers": [
+        14
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 40,
+      "printedPage": 33,
+      "cropNormalized": [
+        0.045,
+        0.30784482807274477,
+        0.955,
+        0.8078448280727448
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图14 运动员 PI 的内侧正手900变线击球"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-015-016.webp",
+      "figureNumbers": [
+        15,
+        16
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 43,
+      "printedPage": 36,
+      "cropNormalized": [
+        0.045,
+        0.4156034482142184,
+        0.955,
+        0.9156034482142184
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图 15 接中路来球时的"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-017.webp",
+      "figureNumbers": [
+        17
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 44,
+      "printedPage": 37,
+      "cropNormalized": [
+        0.045,
+        0.08996575316761352,
+        0.955,
+        0.5899657531676135
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图17 内侧底线反手回90°变线球"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-018-019.webp",
+      "figureNumbers": [
+        18,
+        19
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 45,
+      "printedPage": 38,
+      "cropNormalized": [
+        0.045,
+        0.04922413786939078,
+        0.955,
+        0.5513793109545182
+      ],
+      "width": 1486,
+      "height": 1173,
+      "captionOCR": [
+        "图18 接中路来球时不变线",
+        "图19 接外角发球时不变线"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-020-021.webp",
+      "figureNumbers": [
+        20,
+        21
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 45,
+      "printedPage": 38,
+      "cropNormalized": [
+        0.045,
+        0.4628253425550815,
+        0.955,
+        0.9628253427864013
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图20",
+        "图21"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-022-023.webp",
+      "figureNumbers": [
+        22,
+        23
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 46,
+      "printedPage": 39,
+      "cropNormalized": [
+        0.045,
+        0.4263793104627817,
+        0.955,
+        0.9263793108683114
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图23 削内角球于边线并上网对",
+        "图22 削外角球于对方中路并上"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-024-025.webp",
+      "figureNumbers": [
+        24,
+        25
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 47,
+      "printedPage": 40,
+      "cropNormalized": [
+        0.045,
+        0.45640410948128235,
+        0.955,
+        0.9585445209157046
+      ],
+      "width": 1486,
+      "height": 1173,
+      "captionOCR": [
+        "图24 外侧正手随上球90变线",
+        "图25 外侧反手随上球90%变线"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-026-027.webp",
+      "figureNumbers": [
+        26,
+        27
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 48,
+      "printedPage": 41,
+      "cropNormalized": [
+        0.045,
+        0.2970689660820874,
+        0.955,
+        0.7970689660882451
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图 26",
+        "图 27"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-028.webp",
+      "figureNumbers": [
+        28
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 49,
+      "printedPage": 42,
+      "cropNormalized": [
+        0.045,
+        0.08996575332925155,
+        0.955,
+        0.5899657533292515
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图28 内侧反手随上球变线"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-029.webp",
+      "figureNumbers": [
+        29
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 50,
+      "printedPage": 43,
+      "cropNormalized": [
+        0.045,
+        0.057844827722120795,
+        0.955,
+        0.5578448277221209
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图29 运动员 PI 打直线穿越球"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-030-031.webp",
+      "figureNumbers": [
+        30,
+        31
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 50,
+      "printedPage": 43,
+      "cropNormalized": [
+        0.045,
+        0.4478424659835288,
+        0.955,
+        0.9499828768152252
+      ],
+      "width": 1486,
+      "height": 1173,
+      "captionOCR": [
+        "图30 运动员PI进行",
+        "图 31"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-032-033.webp",
+      "figureNumbers": [
+        32,
+        33
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 52,
+      "printedPage": 45,
+      "cropNormalized": [
+        0.045,
+        0.15246575379553812,
+        0.955,
+        0.6524657538134977
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图32 不变线的外侧截击",
+        "图33 90°变线的外側截击"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-034-035.webp",
+      "figureNumbers": [
+        34,
+        35
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 53,
+      "printedPage": 46,
+      "cropNormalized": [
+        0.045,
+        0.20640410939507553,
+        0.955,
+        0.7064041096788398
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图35 反手内侧变线截击",
+        "图34 正手内侧变线截击"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-036.webp",
+      "figureNumbers": [
+        36
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 58,
+      "printedPage": 51,
+      "cropNormalized": [
+        0.045,
+        0.4349999999203967,
+        0.955,
+        0.9349999999203966
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图36 球场上的三个战术区域"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-037-038.webp",
+      "figureNumbers": [
+        37,
+        38
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 66,
+      "printedPage": 59,
+      "cropNormalized": [
+        0.045,
+        0.4387736128027471,
+        0.955,
+        0.9478424657126425
+      ],
+      "width": 1486,
+      "height": 1189,
+      "captionOCR": [
+        "图37 场地中间1/3区域的",
+        "图38 斜线正手对拉"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-039.webp",
+      "figureNumbers": [
+        39
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 73,
+      "printedPage": 66,
+      "cropNormalized": [
+        0.045,
+        0.14818493184228093,
+        0.955,
+        0.648184931842281
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图39 接20个第二发球的两拍球练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-040.webp",
+      "figureNumbers": [
+        40
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 75,
+      "printedPage": 68,
+      "cropNormalized": [
+        0.045,
+        0.11387931028318393,
+        0.955,
+        0.6138793102831839
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图40 接20个第二发球的4拍球练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-041.webp",
+      "figureNumbers": [
+        41
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 76,
+      "printedPage": 69,
+      "cropNormalized": [
+        0.045,
+        0.3767808216513136,
+        0.955,
+        0.8767808216513135
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图 41 4 拍施压接发球练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-042.webp",
+      "figureNumbers": [
+        42
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 78,
+      "printedPage": 71,
+      "cropNormalized": [
+        0.045,
+        0.22810344822319834,
+        0.955,
+        0.7281034482231983
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图42 接20个第二发球的前5拍练习—发球上网"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-043.webp",
+      "figureNumbers": [
+        43
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 80,
+      "printedPage": 73,
+      "cropNormalized": [
+        0.045,
+        0.1677586205669483,
+        0.955,
+        0.6677586205669483
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图43 接20个第二发球时放小球的4拍练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-044.webp",
+      "figureNumbers": [
+        44
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 81,
+      "printedPage": 74,
+      "cropNormalized": [
+        0.045,
+        0.31000000013591383,
+        0.955,
+        0.8100000001359138
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图44 接20个发球的4拍练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-045.webp",
+      "figureNumbers": [
+        45
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 86,
+      "printedPage": 79,
+      "cropNormalized": [
+        0.43,
+        0.31,
+        0.89,
+        0.79
+      ],
+      "width": 751,
+      "height": 1121,
+      "captionOCR": [],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-046.webp",
+      "figureNumbers": [
+        46
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 88,
+      "printedPage": 81,
+      "cropNormalized": [
+        0.045,
+        0.13534246580244164,
+        0.955,
+        0.6353424658024416
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图46 斜线—正手内角斜线（左区）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-047.webp",
+      "figureNumbers": [
+        47
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 90,
+      "printedPage": 83,
+      "cropNormalized": [
+        0.045,
+        0.06642123290972995,
+        0.955,
+        0.56642123290973
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图47 底线内侧正手斜线击球练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-048.webp",
+      "figureNumbers": [
+        48
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 91,
+      "printedPage": 84,
+      "cropNormalized": [
+        0.045,
+        0.31000000022212076,
+        0.955,
+        0.8100000002221208
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图48 90°变线球"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-049.webp",
+      "figureNumbers": [
+        49
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 93,
+      "printedPage": 86,
+      "cropNormalized": [
+        0.045,
+        0.19628891565350276,
+        0.955,
+        0.6962889156535028
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图49 变換场上位置"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-050.webp",
+      "figureNumbers": [
+        50
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 94,
+      "printedPage": 87,
+      "cropNormalized": [
+        0.045,
+        0.460684931680643,
+        0.955,
+        0.960684931680643
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图50 线路一"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-051.webp",
+      "figureNumbers": [
+        51
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 101,
+      "printedPage": 94,
+      "cropNormalized": [
+        0.045,
+        0.3466379308201811,
+        0.955,
+        0.846637930820181
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图 51 外侧与中路练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-052.webp",
+      "figureNumbers": [
+        52
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 102,
+      "printedPage": 95,
+      "cropNormalized": [
+        0.045,
+        0.38320205512705025,
+        0.955,
+        0.8832020551270503
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图52 大目标练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-053.webp",
+      "figureNumbers": [
+        53
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 104,
+      "printedPage": 97,
+      "cropNormalized": [
+        0.38,
+        0.22,
+        0.82,
+        0.84
+      ],
+      "width": 719,
+      "height": 1448,
+      "captionOCR": [],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-054.webp",
+      "figureNumbers": [
+        54
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 105,
+      "printedPage": 98,
+      "cropNormalized": [
+        0.3,
+        0.39,
+        0.76,
+        0.91
+      ],
+      "width": 750,
+      "height": 1215,
+      "captionOCR": [],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-055.webp",
+      "figureNumbers": [
+        55
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 107,
+      "printedPage": 100,
+      "cropNormalized": [
+        0.25,
+        0.08,
+        0.82,
+        0.51
+      ],
+      "width": 932,
+      "height": 1004,
+      "captionOCR": [],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-056.webp",
+      "figureNumbers": [
+        56
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 108,
+      "printedPage": 101,
+      "cropNormalized": [
+        0.045,
+        0.47379310336867236,
+        0.955,
+        0.9737931033686724
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图 56 拉球对拉球练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-057.webp",
+      "figureNumbers": [
+        57
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 110,
+      "printedPage": 103,
+      "cropNormalized": [
+        0.045,
+        0.14390410948128257,
+        0.955,
+        0.6439041094812825
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图57 多种旋转练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-058.webp",
+      "figureNumbers": [
+        58
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 111,
+      "printedPage": 104,
+      "cropNormalized": [
+        0.045,
+        0.43714041109655905,
+        0.955,
+        0.9371404110965591
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图58 进攻与防守"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-059.webp",
+      "figureNumbers": [
+        59
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 113,
+      "printedPage": 106,
+      "cropNormalized": [
+        0.045,
+        0.1332020549370379,
+        0.955,
+        0.6332020549370379
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图59 压迫式截击练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-060.webp",
+      "figureNumbers": [
+        60
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 115,
+      "printedPage": 108,
+      "cropNormalized": [
+        0.045,
+        0.11603448302923286,
+        0.955,
+        0.6160344830292328
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图60单人近网截击练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-061.webp",
+      "figureNumbers": [
+        61
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 116,
+      "printedPage": 109,
+      "cropNormalized": [
+        0.045,
+        0.21496575381349764,
+        0.955,
+        0.7149657538134977
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图61 中前场近网截击练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-062.webp",
+      "figureNumbers": [
+        62
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 118,
+      "printedPage": 111,
+      "cropNormalized": [
+        0.045,
+        0.05999999992039656,
+        0.955,
+        0.5599999999203966
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图62 两名运动员的近网截击"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-063.webp",
+      "figureNumbers": [
+        63
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 119,
+      "printedPage": 112,
+      "cropNormalized": [
+        0.045,
+        0.30568965567434575,
+        0.955,
+        0.8056896556743458
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图63 高压球练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-064.webp",
+      "figureNumbers": [
+        64
+      ],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 123,
+      "printedPage": 116,
+      "cropNormalized": [
+        0.045,
+        0.11172413785143115,
+        0.955,
+        0.6117241378514311
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图64 放小球练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-065.webp",
+      "figureNumbers": [
+        65
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 1,
+      "printedPage": 118,
+      "cropNormalized": [
+        0.045,
+        0.08996575315144978,
+        0.955,
+        0.5899657531514497
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图65 击内侧底线球后复位还原练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-066.webp",
+      "figureNumbers": [
+        66
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 4,
+      "printedPage": 121,
+      "cropNormalized": [
+        0.045,
+        0.1203448277221208,
+        0.955,
+        0.6203448277221209
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图 66 内侧底线浅球复位还原练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-067.webp",
+      "figureNumbers": [
+        67
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 5,
+      "printedPage": 122,
+      "cropNormalized": [
+        0.045,
+        0.39390410921039637,
+        0.955,
+        0.8939041092103963
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图67 外侧浅球随球上网复位还原练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-068.webp",
+      "figureNumbers": [
+        68
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 18,
+      "printedPage": 135,
+      "cropNormalized": [
+        0.045,
+        0.24103448267901723,
+        0.955,
+        0.7410344826790172
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图68 20个第二发中路击球（1对1）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-069.webp",
+      "figureNumbers": [
+        69
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 19,
+      "printedPage": 136,
+      "cropNormalized": [
+        0.045,
+        0.3703448278941734,
+        0.955,
+        0.8703448278941734
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图69 20个第二发球与挑高球"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-070.webp",
+      "figureNumbers": [
+        70
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 21,
+      "printedPage": 138,
+      "cropNormalized": [
+        0.045,
+        0.09448275840638792,
+        0.955,
+        0.5944827584063879
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图70 20个第二发球与小斜线拦网"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-071.webp",
+      "figureNumbers": [
+        71
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 22,
+      "printedPage": 139,
+      "cropNormalized": [
+        0.045,
+        0.41129310339561226,
+        0.955,
+        0.9112931033956122
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图71 接20个第二发球并随球上网"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-072.webp",
+      "figureNumbers": [
+        72
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 24,
+      "printedPage": 141,
+      "cropNormalized": [
+        0.045,
+        0.09663793097283918,
+        0.955,
+        0.5966379309728391
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图72 双打斜线发球上网（1对1）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-073.webp",
+      "figureNumbers": [
+        73
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 26,
+      "printedPage": 143,
+      "cropNormalized": [
+        0.045,
+        0.09448275919446075,
+        0.955,
+        0.5944827591944608
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图73 在发球者有同伴的情况下，发20 个第二发球（2对1）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-074.webp",
+      "figureNumbers": [
+        74
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 27,
+      "printedPage": 144,
+      "cropNormalized": [
+        0.045,
+        0.4091379313424493,
+        0.955,
+        0.9091379313424492
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图74 在接发球者有同伴的情况下，发20个球（2对1）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-075.webp",
+      "figureNumbers": [
+        75
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 29,
+      "printedPage": 146,
+      "cropNormalized": [
+        0.045,
+        0.27104452054429845,
+        0.955,
+        0.7710445205442984
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图75 接发球方对一名发球者（2对1）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-076.webp",
+      "figureNumbers": [
+        76
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 31,
+      "printedPage": 148,
+      "cropNormalized": [
+        0.045,
+        0.15482758665494917,
+        0.955,
+        0.6548275866549491
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图76 发球方对一名接发球者（2对1）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-077.webp",
+      "figureNumbers": [
+        77
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 32,
+      "printedPage": 149,
+      "cropNormalized": [
+        0.045,
+        0.1074137930418047,
+        0.955,
+        0.6074137930418047
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图77 双打发球上网截击对双底线（2对2）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-078.webp",
+      "figureNumbers": [
+        78
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 34,
+      "printedPage": 151,
+      "cropNormalized": [
+        0.045,
+        0.08140410927690217,
+        0.955,
+        0.5814041092769022
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图78 双打中的斜线练习（1对1）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-079.webp",
+      "figureNumbers": [
+        79
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 36,
+      "printedPage": 153,
+      "cropNormalized": [
+        0.045,
+        0.08996575319455319,
+        0.955,
+        0.5899657531945532
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图79 只能落地两次的双打发球和接发球练习（1对1）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-080.webp",
+      "figureNumbers": [
+        80
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 37,
+      "printedPage": 154,
+      "cropNormalized": [
+        0.045,
+        0.4542636985493181,
+        0.955,
+        0.954263698549318
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图80 双打科线截击对底线（1对1）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-081.webp",
+      "figureNumbers": [
+        81
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 39,
+      "printedPage": 156,
+      "cropNormalized": [
+        0.045,
+        0.07926369860684407,
+        0.955,
+        0.579263698606844
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图81 双打中一人上网截击（1 1）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-082.webp",
+      "figureNumbers": [
+        82
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 41,
+      "printedPage": 158,
+      "cropNormalized": [
+        0.045,
+        0.07498287703038115,
+        0.955,
+        0.5749828770303811
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图82 双打双上网截击（1对1）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-083.webp",
+      "figureNumbers": [
+        83
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 42,
+      "printedPage": 159,
+      "cropNormalized": [
+        0.045,
+        0.3617241380489887,
+        0.955,
+        0.8617241380489886
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图83 双打中的高压球练习（2对1）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-084.webp",
+      "figureNumbers": [
+        84
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 44,
+      "printedPage": 161,
+      "cropNormalized": [
+        0.045,
+        0.09448275928425959,
+        0.955,
+        0.5944827592842596
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图84 双打中给接发球方施加压力（2对2）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-085.webp",
+      "figureNumbers": [
+        85
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 46,
+      "printedPage": 163,
+      "cropNormalized": [
+        0.045,
+        0.09232758687046655,
+        0.955,
+        0.5923275868704665
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图85 双打中接发球者同伴进行抢网（2对2）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-086.webp",
+      "figureNumbers": [
+        86
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 47,
+      "printedPage": 164,
+      "cropNormalized": [
+        0.045,
+        0.14390410921039637,
+        0.955,
+        0.6439041092103963
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图86 双打中的快节奏对拦（2对2）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-087.webp",
+      "figureNumbers": [
+        87
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 49,
+      "printedPage": 166,
+      "cropNormalized": [
+        0.045,
+        0.06428082208917091,
+        0.955,
+        0.5642808220891709
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图87 双打中一人近网截击（2对2）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-088.webp",
+      "figureNumbers": [
+        88
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 50,
+      "printedPage": 167,
+      "cropNormalized": [
+        0.045,
+        0.2646232877503653,
+        0.955,
+        0.7646232877503654
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图88 双打中一方近网 击（2对2）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-089.webp",
+      "figureNumbers": [
+        89
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 52,
+      "printedPage": 169,
+      "cropNormalized": [
+        0.045,
+        0.07712328792996309,
+        0.955,
+        0.577123287929963
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图89 双打中的高压球练习（2对2）"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-090.webp",
+      "figureNumbers": [
+        90
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 58,
+      "printedPage": 175,
+      "cropNormalized": [
+        0.045,
+        0.31642123254371185,
+        0.955,
+        0.8164212325437119
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图90 上旋球热身练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-091.webp",
+      "figureNumbers": [
+        91
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 59,
+      "printedPage": 176,
+      "cropNormalized": [
+        0.045,
+        0.46068493165909136,
+        0.955,
+        0.9606849316590913
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图91 截击热身练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-092.webp",
+      "figureNumbers": [
+        92
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 60,
+      "printedPage": 177,
+      "cropNormalized": [
+        0.045,
+        0.3617241385174323,
+        0.955,
+        0.8617241385174323
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图92 一前一后热身练习"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-093.webp",
+      "figureNumbers": [
+        93
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 61,
+      "printedPage": 178,
+      "cropNormalized": [
+        0.045,
+        0.45854452054429845,
+        0.955,
+        0.9585445205442984
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图93 小场地外侧对拉"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-094.webp",
+      "figureNumbers": [
+        94
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 62,
+      "printedPage": 179,
+      "cropNormalized": [
+        0.045,
+        0.09448275899157016,
+        0.955,
+        0.5944827589915702
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图94 小场地内侧对拉"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-095.webp",
+      "figureNumbers": [
+        95
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 63,
+      "printedPage": 180,
+      "cropNormalized": [
+        0.045,
+        0.05784482815721054,
+        0.955,
+        0.5578448281572106
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图95 小场地截击"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-096.webp",
+      "figureNumbers": [
+        96
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 63,
+      "printedPage": 180,
+      "cropNormalized": [
+        0.045,
+        0.45426369882236134,
+        0.955,
+        0.9542636988223614
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图96 小场地截击变线"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-097.webp",
+      "figureNumbers": [
+        97
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 64,
+      "printedPage": 181,
+      "cropNormalized": [
+        0.045,
+        0.4649657532807601,
+        0.955,
+        0.9649657532807601
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图97 手抛球至外侧正手和反手击球"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-098.webp",
+      "figureNumbers": [
+        98
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 65,
+      "printedPage": 182,
+      "cropNormalized": [
+        0.045,
+        0.06428082218615355,
+        0.955,
+        0.5642808221861535
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图98 手抛球至内侧正手和反手击球"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-099.webp",
+      "figureNumbers": [
+        99
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 65,
+      "printedPage": 182,
+      "cropNormalized": [
+        0.045,
+        0.46068493128039173,
+        0.955,
+        0.9606849312803918
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图99送外侧正、反手随上球"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-100.webp",
+      "figureNumbers": [
+        100
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 66,
+      "printedPage": 183,
+      "cropNormalized": [
+        0.045,
+        0.17853448320667326,
+        0.955,
+        0.6785344832066733
+      ],
+      "width": 1486,
+      "height": 1168,
+      "captionOCR": [
+        "图100 连续送外侧正、反手球及随上球"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-101-102.webp",
+      "figureNumbers": [
+        101,
+        102
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 67,
+      "printedPage": 184,
+      "cropNormalized": [
+        0.045,
+        0.05514457226026187,
+        0.955,
+        0.5578448281572106
+      ],
+      "width": 1486,
+      "height": 1174,
+      "captionOCR": [
+        "图102 方法2",
+        "图101 万法1"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-103-104.webp",
+      "figureNumbers": [
+        103,
+        104
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 67,
+      "printedPage": 184,
+      "cropNormalized": [
+        0.045,
+        0.4519779359796752,
+        0.955,
+        0.9542636984563433
+      ],
+      "width": 1486,
+      "height": 1173,
+      "captionOCR": [
+        "图104 方法4",
+        "图103 方法3"
+      ],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "figure-105.webp",
+      "figureNumbers": [
+        105
+      ],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 68,
+      "printedPage": 185,
+      "cropNormalized": [
+        0.43,
+        0.25,
+        0.9,
+        0.79
+      ],
+      "width": 767,
+      "height": 1261,
+      "captionOCR": [],
+      "method": "原扫描页裁图"
+    },
+    {
+      "file": "photo-lower-warmup.webp",
+      "figureNumbers": [],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 87,
+      "printedPage": 204,
+      "cropNormalized": [
+        0.22,
+        0.17,
+        0.8,
+        0.53
+      ],
+      "width": 947,
+      "height": 841,
+      "captionOCR": [],
+      "method": "原扫描页照片裁图",
+      "alt": "双打热身训练场景，原书印刷页204"
+    },
+    {
+      "file": "photo-lower-match.webp",
+      "figureNumbers": [],
+      "sourceVolume": "lower",
+      "sourcePDFPage": 88,
+      "printedPage": 205,
+      "cropNormalized": [
+        0.24,
+        0.18,
+        0.78,
+        0.57
+      ],
+      "width": 881,
+      "height": 912,
+      "captionOCR": [],
+      "method": "原扫描页照片裁图",
+      "alt": "网球比赛现场，原书印刷页205"
+    },
+    {
+      "file": "photo-author-portrait.webp",
+      "figureNumbers": [],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 4,
+      "printedPage": null,
+      "cropNormalized": [
+        0.49,
+        0.3,
+        0.85,
+        0.67
+      ],
+      "width": 587,
+      "height": 864,
+      "captionOCR": [],
+      "method": "原扫描页照片裁图",
+      "alt": "作者保罗·沃德洛肖像，原书作者介绍页"
+    },
+    {
+      "file": "photo-upper-competitive-focus.webp",
+      "figureNumbers": [],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 13,
+      "printedPage": 6,
+      "cropNormalized": [
+        0.22,
+        0.18,
+        0.77,
+        0.79
+      ],
+      "width": 898,
+      "height": 1425,
+      "captionOCR": [],
+      "method": "原扫描页照片裁图",
+      "alt": "比赛中的网球运动员，原书印刷页6"
+    },
+    {
+      "file": "photo-upper-shot-selection.webp",
+      "figureNumbers": [],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 17,
+      "printedPage": 10,
+      "cropNormalized": [
+        0.22,
+        0.23,
+        0.78,
+        0.77
+      ],
+      "width": 914,
+      "height": 1262,
+      "captionOCR": [],
+      "method": "原扫描页照片裁图",
+      "alt": "比赛中的网球运动员，原书印刷页10"
+    },
+    {
+      "file": "photo-upper-positioning.webp",
+      "figureNumbers": [],
+      "sourceVolume": "upper",
+      "sourcePDFPage": 57,
+      "printedPage": 50,
+      "cropNormalized": [
+        0.26,
+        0.42,
+        0.74,
+        0.87
+      ],
+      "width": 784,
+      "height": 1051,
+      "captionOCR": [],
+      "method": "原扫描页照片裁图",
+      "alt": "张德培在底线外击球，原书印刷页50"
+    }
+  ],
+  "coverImage": {
+    "file": "cover.webp",
+    "sourceVolume": "upper",
+    "sourcePDFPage": 1,
+    "method": "原扫描标题页缩图"
+  },
+  "ocr": {
+    "engine": "Apple Vision VNRecognizeTextRequest",
+    "recognitionLanguages": [
+      "zh-Hans",
+      "en-US"
+    ],
+    "inputResolution": "1632×2336 original scan pages",
+    "pages": {
+      "upper": 124,
+      "lower": 124
+    },
+    "notes": "正文由逐页OCR整理并与扫描抽查。运动员标号、方向、角度、次数及表格数字仍可能含识别误差；疑难处见导入稿与编辑记录。"
+  },
+  "tables": [
+    {
+      "file": "table-page-187.webp",
+      "sourceVolume": "lower",
+      "sourcePDFPage": 70,
+      "printedPage": 187,
+      "cropNormalized": [
+        0.115,
+        0.415,
+        0.89,
+        0.805
+      ],
+      "width": 1264,
+      "height": 911,
+      "caption": "原书成绩表页面裁图",
+      "method": "原扫描页裁图；OCR表格行由图像保留"
+    },
+    {
+      "file": "table-page-188.webp",
+      "sourceVolume": "lower",
+      "sourcePDFPage": 71,
+      "printedPage": 188,
+      "cropNormalized": [
+        0.115,
+        0.14,
+        0.89,
+        0.95
+      ],
+      "width": 1264,
+      "height": 1892,
+      "caption": "原书成绩表页面裁图",
+      "method": "原扫描页裁图；OCR表格行由图像保留"
+    },
+    {
+      "file": "table-page-189.webp",
+      "sourceVolume": "lower",
+      "sourcePDFPage": 72,
+      "printedPage": 189,
+      "cropNormalized": [
+        0.115,
+        0.495,
+        0.89,
+        0.855
+      ],
+      "width": 1264,
+      "height": 841,
+      "caption": "原书成绩表页面裁图",
+      "method": "原扫描页裁图；OCR表格行由图像保留"
+    },
+    {
+      "file": "table-page-190.webp",
+      "sourceVolume": "lower",
+      "sourcePDFPage": 73,
+      "printedPage": 190,
+      "cropNormalized": [
+        0.115,
+        0.105,
+        0.89,
+        0.885
+      ],
+      "width": 1264,
+      "height": 1822,
+      "caption": "原书成绩表页面裁图",
+      "method": "原扫描页裁图；OCR表格行由图像保留"
+    },
+    {
+      "file": "table-page-191.webp",
+      "sourceVolume": "lower",
+      "sourcePDFPage": 74,
+      "printedPage": 191,
+      "cropNormalized": [
+        0.115,
+        0.105,
+        0.89,
+        0.9
+      ],
+      "width": 1264,
+      "height": 1857,
+      "caption": "原书成绩表页面裁图",
+      "method": "原扫描页裁图；OCR表格行由图像保留"
+    },
+    {
+      "file": "table-page-192.webp",
+      "sourceVolume": "lower",
+      "sourcePDFPage": 75,
+      "printedPage": 192,
+      "cropNormalized": [
+        0.115,
+        0.105,
+        0.89,
+        0.89
+      ],
+      "width": 1264,
+      "height": 1834,
+      "caption": "原书成绩表页面裁图",
+      "method": "原扫描页裁图；OCR表格行由图像保留"
+    },
+    {
+      "file": "table-page-193.webp",
+      "sourceVolume": "lower",
+      "sourcePDFPage": 76,
+      "printedPage": 193,
+      "cropNormalized": [
+        0.115,
+        0.105,
+        0.89,
+        0.535
+      ],
+      "width": 1264,
+      "height": 1005,
+      "caption": "原书成绩表页面裁图",
+      "method": "原扫描页裁图；OCR表格行由图像保留"
+    }
+  ]
+}

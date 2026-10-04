@@ -1,8 +1,8 @@
 # 书间 · 图文书籍阅读器
 
-Next.js 阅读网站与内容管理后台。框架代码放在 repo；书籍资料、Markdown、图片和管理状态保存在持久化存储中。新增或修改内容时无需修改源码、提交 Git 或重新构建网站。
+Next.js 阅读网站。框架和四本书的资料都保存在这个 GitHub 仓库中。修改内容后提交并推送，Vercel 会自动部署新版本。
 
-读者公开阅读；只有预先配置的管理员能管理内容。没有开放注册。本地和 Docker 使用文件系统；部署到 Vercel 时使用私有 Vercel Blob。
+Vercel 上的书架只读。书籍可在本地通过管理后台编辑，也可以直接修改仓库中的 JSON、Markdown 和图片。
 
 ## 目录与数据边界
 
@@ -17,21 +17,21 @@ Dockerfile             只打包框架，不包含内容或凭据
 compose.yaml           框架容器 + 独立持久化数据卷
 .env.example           配置示例，可以提交
 
-data/                  本地和 Docker 运行时数据，不提交 Git；可用 DATA_DIR 指向 repo 外部
-  books/<book>/
+data/
+  books/<book>/         书籍内容，跟随代码提交到 GitHub
     book.json          书籍资料和发布状态
     chapters/*.md      章节正文和资料
     images/*           原始图片
     extraction.json    扫描裁图记录（如有）
-  auth/                本地和 Docker 的会话与登录限速记录，不通过 HTTP 暴露
-  history/<book>/       本地和 Docker 覆盖保存前的旧资料和正文
-  trash/               本地和 Docker 移除的书籍或章节
+  auth/                本地编辑器的会话与登录限速记录，不提交 Git
+  history/<book>/      本地编辑器覆盖保存前的旧资料和正文，不提交 Git
+  trash/               本地编辑器移除的书籍或章节，不提交 Git
 .env.local             本机配置与密码哈希，不提交 Git
 ```
 
-原来的 `content/books/tennis-improvement/` 已迁到 `data/books/tennis-improvement/`，保留 47 节正文、522 幅图组与扫描裁图记录。本地和 Docker 从 `data/` 读取运行时内容；Vercel 部署把 `data/books/` 迁入私有 Blob。首次把框架提交到 Git 前，请另外备份整个数据目录。Git clone 只取得框架，内容需要从备份或 Blob 迁入。
+`data/books/` 包含《网球进阶》《网球运动系统训练》《网球步法》和《网球压力训练》。克隆仓库即可取得完整书库；Vercel 部署从同一目录读取书籍和章节。管理登录、历史版本和回收内容属于本地运行状态，不会提交到 GitHub。
 
-构建不读取数据目录，也不生成 `src/generated/library.json`、`public/books/` 或静态 `out/`。页面和搜索在请求时读取当前数据；保存后的内容在读者刷新页面或重新打开搜索时生效。阅读进度、字号、主题和图片放大功能保留。
+页面和搜索在请求时读取仓库中的书籍资料。Vercel 构建会把已发布书籍的图片复制为静态资源，并生成图片尺寸索引；章节和书籍资料由 Next.js 服务读取。网站仍需要 Node.js 服务，不能使用旧的 `out/` 静态导出。
 
 ## 本地启动
 
@@ -39,14 +39,13 @@ data/                  本地和 Docker 运行时数据，不提交 Git；可用
 
 ```bash
 npm ci
-npm run init-data
 npm run setup-admin
 npm run dev
 ```
 
-`setup-admin` 会交互式询问用户名和密码，密码不回显，至少 12 个字符；仅把密码哈希写入 `.env.local`。不提供默认密码。已有环境变量或部署平台配置优先于 `.env.local`。
+`setup-admin` 会交互式询问用户名和密码，密码不回显，至少 12 个字符；仅把密码哈希写入 `.env.local`。这只用于本地管理后台。Vercel 上不启用登录或在线编辑。
 
-打开 [书架](http://localhost:3000/) 或 [管理后台](http://localhost:3000/admin/)。默认 `APP_URL=http://localhost:3000`；如果使用其他端口或访问地址，请同步修改 `APP_URL`，否则后台会拒绝不同来源的写入请求。
+打开 [书架](http://localhost:3000/) 或本地 [管理后台](http://localhost:3000/admin/)。默认 `APP_URL=http://localhost:3000`；如果使用其他端口或访问地址，请同步修改 `APP_URL`，否则后台会拒绝不同来源的写入请求。
 
 生产模式：
 
@@ -61,7 +60,7 @@ npm start
 
 ## 管理内容
 
-在 `/admin/` 添加书籍，填写书籍标识（如 `tennis-notes`）和书名。新书默认是草稿。
+本地运行时可以在 `/admin/` 添加书籍，填写书籍标识（如 `tennis-notes`）和书名。新书默认是草稿。保存会修改 `data/books/` 下的仓库文件；推送这些改动后，Vercel 会部署更新后的书籍。
 
 在书籍编辑页：
 
@@ -92,49 +91,40 @@ published: true
 
 图片支持 WebP、PNG、JPEG 和 GIF，每张最多 10 MB、4000 万像素；只接受当前书籍 `images/` 内的相对引用。上传时生成新的文件名，避免覆盖旧图。不接受 SVG、远程图片或越界路径。Markdown 的原始 HTML 被转义，资料区只接受 YAML，不执行代码。
 
-也可直接修改 `DATA_DIR/books/` 下的 JSON、Markdown 和图片，再校验：
+也可直接修改 `data/books/` 下的 JSON、Markdown 和图片，再校验：
 
 ```bash
 npm run check-content
 npm run add-book -- tennis-notes "网球训练笔记"
 ```
 
-直接修改文件时，请保留资料结构并避免与后台同时修改同一个文件。只有后台保存才会自动生成历史版本。
+直接修改文件时，请保留资料结构。后台保存会在本地生成历史版本；文件提交到 Git 后，可以用 GitHub 历史恢复内容。
 
 ## 导入、备份和恢复
 
-`DATA_DIR` 指向包含 `books/` 的目录，例如 `/srv/shujian-data`。它是运行时配置，修改后重启服务，无需重建框架。
+`DATA_DIR` 默认是仓库中的 `data/`，包括书籍和本地运行状态。自托管时可把它设为持久化目录，例如 `/srv/shujian-data`。
 
-从旧项目的 `content/books/` 或备份的 `books/` 导入：
+从备份的 `books/` 导入：
 
 ```bash
 npm run init-data -- --from /path/to/backup/books
 ```
 
-导入先复制到暂存目录，校验所有章节与引用图片后移入数据目录。源文件保持原样；同名书籍已存在时跳过，不覆盖。
+导入先复制到暂存目录，校验所有章节与引用图片后移入 `data/books/`。源文件保持原样；同名书籍已存在时跳过，不覆盖。
 
 备份请包含整个 `DATA_DIR`，以及单独妥善保存部署配置。为取得一致的快照，备份或恢复时短暂停止服务。恢复时把备份放回数据目录并重启服务即可。`history/` 保存覆盖前的原文件；`trash/<批次>/<book>/` 保存已移除的章节，整本书在该路径的 `book/` 下。恢复单个条目时，停止服务、把文件放回 `books/<book>/` 对应位置，再运行 `check-content`。历史记录和回收目录不会自动清理。
 
-密码忘记或需要轮换时，重新运行 `npm run setup-admin` 并重启服务。账号或密码哈希变化会使旧会话失效；会话有效期 12 小时，退出登录会在服务端撤销。全局账号在 15 分钟窗口内最多允许 5 次失败尝试。会话和限速状态保存在本地/Docker 数据目录或 Vercel Blob，重启服务不会重置。
+密码忘记或需要轮换时，重新运行 `npm run setup-admin` 并重启本地服务。账号或密码哈希变化会使旧会话失效；会话有效期 12 小时，退出登录会在服务端撤销。全局账号在 15 分钟窗口内最多允许 5 次失败尝试。会话和限速状态保存在本地/Docker 数据目录。
 
 ## Vercel 部署
 
-Vercel Functions 的文件系统不适合保存运行时改动。本项目在 Vercel 上把书籍资料、章节、图片、历史版本、回收内容、管理会话和登录限速状态保存到**私有 Vercel Blob**；图片由浏览器直传 Blob，并通过短时签名地址读取。函数请求体有 4.5 MB 上限，因此图片不会经过函数上传或下载。
+书籍内容和图片已经在 GitHub 仓库中，无需创建 Blob，也无需添加 Vercel 环境变量。线上内容只读；在 GitHub 改动并推送后，Vercel 会重新构建部署。
 
-1. 在 Vercel 导入 `tinyviber/tennis-book`，使用 Next.js 默认构建设置。项目的 `.nvmrc` 为 Node.js 24；Vercel 当前默认支持 24.x。
-2. 在项目的 **Storage** 中创建并连接一个 **Private Blob** store，至少连接 Production 环境。不要把生产 Blob store 共享给可编辑内容的 Preview 部署；需要预览时给 Preview 单独连接一个私有 store。
-3. 在 Vercel 项目设置中为 Production 配置 `APP_URL`、`ADMIN_USERNAME` 和 `ADMIN_PASSWORD_HASH`。`APP_URL` 填最终访问域名的 Origin，例如 `https://books.example.com`，不要带路径。Preview 环境没有设置 `APP_URL` 时会自动使用 Vercel 提供的部署域名；如果要在 Preview 使用后台，请为其配置单独的管理员凭据和私有 Blob store。可在本机运行 `npm run setup-admin` 生成管理员配置，再把 `.env.local` 中这两个管理员变量复制到 Vercel。Blob store 会提供所需的访问凭据；`STORAGE_DRIVER` 在 Vercel 上会自动选择 Blob。
-4. 把现有书库迁入 Production Blob。安装并登录 Vercel CLI 后，在项目目录运行：
+1. 在 Vercel 导入 `tinyviber/tennis-book`，使用 Next.js 默认构建设置。
+2. 点击部署。仓库中的 `data/books/` 会随项目构建；Vercel 不需要 Blob store、管理员变量或内容迁移步骤。
+3. 更新书籍时，修改 GitHub 上 `data/books/<书籍标识>/` 中的 `book.json`、`chapters/*.md` 或 `images/`，提交改动。也可以在本地编辑后运行 `npm run check-content`，再提交并推送。Vercel 会在推送后自动部署。
 
-   ```bash
-   vercel link
-   vercel env pull .env.local --environment=production
-   npm run migrate-vercel-blob
-   ```
-
-   脚本读取 `data/books/`，只上传书籍、章节、图片和图片尺寸索引；不会上传认证信息、会话、历史版本或回收目录。当前本地书库约 37 MB。重复运行会跳过已有对象；只有确认要用本地文件覆盖线上同名内容时才加 `--overwrite`。
-
-部署完成后，后台上传和编辑会直接写入 Blob；Vercel Function 的 4.5 MB 请求/响应限制由图片直传和签名读取绕开。更多说明见 [Vercel Blob 私有存储](https://vercel.com/docs/vercel-blob/private-storage)、[浏览器直传](https://vercel.com/docs/vercel-blob/client-upload) 和 [函数限制](https://vercel.com/docs/functions/limitations)。
+部署版 `/admin/` 只展示内容更新说明，所有写入接口都会拒绝修改。管理员后台只用于本地开发。
 
 ## 服务器部署
 
@@ -166,7 +156,7 @@ docker compose start reader
 
 子路径部署：构建时设置 `BASE_PATH=/bookshelf`；Docker 使用上面的 `--env-file` 读取 `.env.local` 中的 `BASE_PATH`。`APP_URL` 仍填写域名的 Origin（如 `https://example.com`）。图片、搜索和管理请求会自动带上构建时的子路径。修改子路径需要重建框架。
 
-Vercel 使用私有 Blob 的条件写入保存编辑版本，多个函数实例可以共享书籍、会话和限速状态。其他无持久化磁盘的平台仍需提供兼容的持久化存储实现。
+Vercel 从 GitHub 部署快照读取书籍文件。线上修改内容需要创建新的 Git 提交并触发部署；本地与 Docker 编辑继续使用文件系统。
 
 ## 验证与来源说明
 

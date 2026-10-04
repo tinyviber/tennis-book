@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/prepare-vercel-content.mjs",
     "build": "next build --webpack",
     "postbuild": "node scripts/clean-standalone.mjs",
     "start": "next start",
@@ -13,14 +14,12 @@
     "init-data": "tsx scripts/init-data.ts",
     "check-content": "tsx scripts/check-content.ts",
     "setup-admin": "tsx scripts/setup-admin.ts",
-    "add-book": "tsx scripts/add-book.ts",
-    "migrate-vercel-blob": "tsx scripts/migrate-vercel-blob.ts"
+    "add-book": "tsx scripts/add-book.ts"
   },
   "dependencies": {
     "@fontsource-variable/noto-sans-sc": "^5.2.9",
     "@fontsource-variable/noto-serif-sc": "^5.2.8",
     "@next/env": "^16.3.8",
-    "@vercel/blob": "^2.8.0",
     "gray-matter": "4.0.3",
     "image-size": "2.0.4",
     "lucide-react": "1.51.0",
