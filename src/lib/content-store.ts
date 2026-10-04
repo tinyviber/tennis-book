@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
+import { BlobNotFoundError, BlobPreconditionFailedError, copy, del, get, head, issueSignedToken, list, presignUrl, put } from '@vercel/blob';
 import matter from 'gray-matter';
 import MarkdownIt from 'markdown-it';
 import { imageSize } from 'image-size';
@@ -26,18 +27,94 @@ export function validateImageName(value: string): string {
   return value;
 }
 const bookPath = (slug: string) => path.join(booksRoot(), validateSlug(slug));
-export const isMissing = (error: unknown) => (error as NodeJS.ErrnoException)?.code === 'ENOENT';
-async function readFile(file: string): Promise<Buffer> {
+export const isBlobStorage = () => process.env.STORAGE_DRIVER === 'vercel-blob' || process.env.VERCEL === '1';
+export const isMissing = (error: unknown) =>
+  (error as NodeJS.ErrnoException)?.code === 'ENOENT' ||
+  error instanceof ContentError && error.status === 404 ||
+  error instanceof BlobNotFoundError;
+type StoredFile = { bytes: Buffer; etag?: string };
+export type WriteCondition = { ifMatch?: string; ifAbsent?: boolean };
+type BlobItem = { pathname: string; url: string; etag: string };
+type DataEntry = { name: string; isDirectory: boolean };
+
+function dataRelativePath(file: string): string | null {
+  const root = dataRoot(), target = path.resolve(file), relative = path.relative(root, target);
+  if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) return null;
+  return relative.split(path.sep).join('/');
+}
+function blobPath(file: string): string {
+  const relative = dataRelativePath(file);
+  if (relative === null) throw new ContentError('内容路径越界。');
+  return relative;
+}
+async function listBlobItems(prefix: string): Promise<BlobItem[]> {
+  const items: BlobItem[] = [];
+  let cursor: string | undefined;
+  do {
+    const page = await list({ prefix, cursor, limit: 1000 });
+    items.push(...page.blobs);
+    cursor = page.cursor;
+  } while (cursor);
+  return items;
+}
+export async function listDataEntries(directory: string): Promise<DataEntry[]> {
+  if (!isBlobStorage()) {
+    try {
+      return (await fs.readdir(directory, { withFileTypes: true })).map(item => ({ name: item.name, isDirectory: item.isDirectory() }));
+    } catch (error) {
+      if (isMissing(error)) return [];
+      throw error;
+    }
+  }
+  const key = blobPath(directory), prefix = key ? `${key.replace(/\/$/, '')}/` : '';
+  const entries = new Map<string, boolean>();
+  for (const item of await listBlobItems(prefix)) {
+    const relative = item.pathname.slice(prefix.length), slash = relative.indexOf('/');
+    const name = slash < 0 ? relative : relative.slice(0, slash);
+    if (name) entries.set(name, slash >= 0 || entries.get(name) === true);
+  }
+  return [...entries].map(([name, isDirectory]) => ({ name, isDirectory })).sort((a, b) => a.name.localeCompare(b.name));
+}
+export async function readDataFile(file: string): Promise<StoredFile> {
+  if (isBlobStorage()) {
+    const key = blobPath(file), result = await get(key, { access: 'private', useCache: false });
+    if (!result || result.statusCode !== 200 || !result.stream) throw new ContentError('内容不存在。', 404);
+    return { bytes: Buffer.from(await new Response(result.stream).arrayBuffer()), etag: result.blob.etag };
+  }
   try {
     const [resolved, root] = await Promise.all([fs.realpath(file), fs.realpath(dataRoot())]);
     if (!resolved.startsWith(root + path.sep)) throw new ContentError('内容路径越界。');
-    return await fs.readFile(resolved);
+    const bytes = await fs.readFile(resolved);
+    return { bytes, etag: revisionOf(bytes) };
   } catch (error) {
     if (isMissing(error)) throw new ContentError('内容不存在。', 404);
     throw error;
   }
 }
-export async function atomicWrite(file: string, value: string | Buffer): Promise<void> {
+async function readFile(file: string): Promise<Buffer> {
+  return (await readDataFile(file)).bytes;
+}
+async function maybeReadDataFile(file: string): Promise<StoredFile | null> {
+  try { return await readDataFile(file); } catch (error) { if (isMissing(error)) return null; throw error; }
+}
+export async function atomicWrite(file: string, value: string | Buffer, condition?: WriteCondition): Promise<void> {
+  if (isBlobStorage() && dataRelativePath(file) !== null) {
+    const key = blobPath(file);
+    let ifMatch = condition?.ifMatch, allowOverwrite = !condition?.ifAbsent;
+    if (!condition) {
+      try { ifMatch = (await head(key)).etag; allowOverwrite = true; }
+      catch (error) { if (isMissing(error)) allowOverwrite = false; else throw error; }
+    }
+    try {
+      await put(key, value, { access: 'private', addRandomSuffix: false, allowOverwrite, ...(ifMatch ? { ifMatch } : {}) });
+    } catch (error) {
+      if (error instanceof BlobPreconditionFailedError || (error as Error)?.name === 'BlobAlreadyExistsError' || /already exists/i.test((error as Error)?.message || '')) {
+        throw new ContentError('内容已被更新，或标识已存在。请重新加载后再保存。', 409);
+      }
+      throw error;
+    }
+    return;
+  }
   await fs.mkdir(path.dirname(file), { recursive: true });
   const temp = `${file}.${randomUUID()}.tmp`;
   try {
@@ -45,7 +122,30 @@ export async function atomicWrite(file: string, value: string | Buffer): Promise
     await fs.rename(temp, file);
   } finally { await fs.rm(temp, { force: true }); }
 }
-// This application runs as one Node instance. Serialize writes and revision checks per book.
+export async function removeDataFile(file: string, etag?: string): Promise<void> {
+  if (isBlobStorage()) {
+    try {
+      const metadata = await head(blobPath(file));
+      await del(metadata.url, etag ? { ifMatch: etag } : undefined);
+    } catch (error) { if (!isMissing(error)) throw error; }
+    return;
+  }
+  await fs.rm(file, { force: true });
+}
+export async function signedBlobReadUrl(key: string): Promise<string> {
+  const now = Date.now();
+  if (!cachedReadToken || cachedReadTokenUntil < now + 20 * 60_000) {
+    cachedReadToken = await issueSignedToken({ pathname: '*', operations: ['get'], validUntil: now + 60 * 60 * 1000 });
+    cachedReadTokenUntil = now + 60 * 60 * 1000;
+  }
+  const { presignedUrl } = await presignUrl(cachedReadToken, {
+    operation: 'get', pathname: key, access: 'private', validUntil: now + 15 * 60 * 1000,
+  });
+  return presignedUrl;
+}
+let cachedReadToken: Awaited<ReturnType<typeof issueSignedToken>> | null = null;
+let cachedReadTokenUntil = 0;
+// Serialize local writes; Blob writes also use ETags to coordinate across function instances.
 const edits = new Map<string, Promise<unknown>>();
 export async function serialized<T>(key: string, operation: () => Promise<T>): Promise<T> {
   const previous = edits.get(key) || Promise.resolve();
@@ -107,7 +207,60 @@ const escape = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&am
 type Asset = { name: string; width: number; height: number; type: string; bytes: Buffer };
 type ImageInfo = Pick<Asset, 'width' | 'height' | 'type'>;
 const imageInfoCache = new Map<string, { signature: string; info: ImageInfo }>();
-async function readImageInfo(slug: string, name: string): Promise<ImageInfo> {
+const blobImageIndexCache = new Map<string, { expiresAt: number; index: Record<string, ImageInfo> }>();
+const imageIndexPath = (slug: string) => path.join(bookPath(slug), 'image-index.json');
+async function readBlobImageIndex(slug: string, forceRefresh = false): Promise<Record<string, ImageInfo>> {
+  const cached = blobImageIndexCache.get(slug);
+  if (!forceRefresh && cached && cached.expiresAt > Date.now()) return cached.index;
+  const stored = await maybeReadDataFile(imageIndexPath(slug));
+  let index: Record<string, ImageInfo> = {};
+  if (stored) {
+    try {
+      const value = JSON.parse(stored.bytes.toString('utf8')) as Record<string, unknown>;
+      for (const [name, item] of Object.entries(value)) {
+        if (!imagePattern.test(name) || !item || typeof item !== 'object') continue;
+        const info = item as Partial<ImageInfo>;
+        if (Number.isSafeInteger(info.width) && Number.isSafeInteger(info.height) && info.width! > 0 && info.height! > 0 && ['webp', 'png', 'jpg', 'gif'].includes(info.type || '')) {
+          index[name] = { width: info.width!, height: info.height!, type: info.type! };
+        }
+      }
+    } catch { throw new ContentError('图片索引格式不正确。', 500); }
+  }
+  if (blobImageIndexCache.size > 100) blobImageIndexCache.clear();
+  blobImageIndexCache.set(slug, { expiresAt: Date.now() + 30_000, index });
+  return index;
+}
+async function updateBlobImageIndex(slug: string, name: string, info: ImageInfo): Promise<void> {
+  const file = imageIndexPath(slug);
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const current = await maybeReadDataFile(file);
+    let index: Record<string, ImageInfo> = {};
+    if (current) {
+      try { index = JSON.parse(current.bytes.toString('utf8')); }
+      catch { throw new ContentError('图片索引格式不正确。', 500); }
+    }
+    index[name] = info;
+    try {
+      await atomicWrite(file, JSON.stringify(index), current ? { ifMatch: current.etag } : { ifAbsent: true });
+      blobImageIndexCache.set(slug, { expiresAt: Date.now() + 30_000, index });
+      return;
+    } catch (error) {
+      if (!(error instanceof ContentError && error.status === 409)) throw error;
+    }
+  }
+  throw new ContentError('图片库正在被更新，请稍后重试。', 409);
+}
+export async function readImageInfo(slug: string, name: string): Promise<ImageInfo> {
+  validateSlug(slug);
+  validateImageName(name);
+  if (isBlobStorage()) {
+    const info = (await readBlobImageIndex(slug))[name];
+    if (info) return info;
+    const asset = await readImage(slug, name);
+    const generated = { width: asset.width, height: asset.height, type: asset.type };
+    await updateBlobImageIndex(slug, name, generated);
+    return generated;
+  }
   const file = path.join(bookPath(slug), 'images', validateImageName(name));
   let stat;
   try { stat = await fs.stat(file); } catch (error) { if (isMissing(error)) throw new ContentError('引用的图片不存在。', 404); throw error; }
@@ -121,7 +274,7 @@ async function readImageInfo(slug: string, name: string): Promise<ImageInfo> {
   return info;
 }
 export async function readImage(slug: string, name: string): Promise<Asset> {
-  const bytes = await readFile(path.join(bookPath(slug), 'images', validateImageName(name)));
+  const { bytes } = await readDataFile(path.join(bookPath(slug), 'images', validateImageName(name)));
   return { name, bytes, ...validateImage(bytes, name) };
 }
 export function validateImage(bytes: Buffer, name: string) {
@@ -187,14 +340,12 @@ export async function readChapterDocument(book: string, slug: string): Promise<C
   return { ...parseChapter(slug, source).data, source, revision: revisionOf(raw) };
 }
 async function chapterNames(slug: string) {
-  try { return (await fs.readdir(path.join(bookPath(slug), 'chapters'))).filter(name => name.endsWith('.md')).sort(); }
-  catch (error) { if (isMissing(error)) return []; throw error; }
+  return (await listDataEntries(path.join(bookPath(slug), 'chapters')))
+    .filter(item => !item.isDirectory && item.name.endsWith('.md')).map(item => item.name).sort();
 }
 export async function listBookDocuments() {
-  let directories;
-  try { directories = await fs.readdir(booksRoot(), { withFileTypes: true }); }
-  catch (error) { if (isMissing(error)) return []; throw error; }
-  return Promise.all(directories.filter(item => item.isDirectory() && slugPattern.test(item.name)).sort((a, b) => a.name.localeCompare(b.name)).map(async item => {
+  const directories = await listDataEntries(booksRoot());
+  return Promise.all(directories.filter(item => item.isDirectory && slugPattern.test(item.name)).sort((a, b) => a.name.localeCompare(b.name)).map(async item => {
     const document = await readBookDocument(item.name);
     return { ...document, chapterCount: (await chapterNames(item.name)).length };
   }));
@@ -219,33 +370,33 @@ export async function readPublishedBooks(): Promise<Book[]> {
 export async function getEditorBook(slug: string) {
   const document = await readBookDocument(slug);
   const chapters = await Promise.all((await chapterNames(slug)).map(name => readChapterDocument(slug, name.slice(0, -3))));
-  let images: string[];
-  try { images = (await fs.readdir(path.join(bookPath(slug), 'images'))).filter(name => imagePattern.test(name)).sort(); }
-  catch (error) { if (isMissing(error)) images = []; else throw error; }
+  const imageEntries = await listDataEntries(path.join(bookPath(slug), 'images'));
+  let images = imageEntries.filter(item => !item.isDirectory && imagePattern.test(item.name)).map(item => item.name).sort();
+  if (isBlobStorage()) {
+    const index = await readBlobImageIndex(slug, true);
+    images = images.filter(name => !!index[name]);
+  }
   chapters.sort((a, b) => a.order - b.order || a.slug.localeCompare(b.slug));
   return { ...document, chapters: chapters.map(({ source: _source, ...chapter }) => chapter), images };
 }
-async function currentRevision(file: string): Promise<string | null> {
-  try { return revisionOf(await readFile(file)); } catch (error) {
-    if (error instanceof ContentError && error.status === 404) return null;
-    throw error;
-  }
+function checkRevision(current: StoredFile | null, expected: string | null) {
+  if ((current ? revisionOf(current.bytes) : null) !== expected) throw new ContentError('内容已被更新，或标识已存在。请重新加载后再保存。', 409);
 }
-async function checkRevision(file: string, expected: string | null) {
-  if (await currentRevision(file) !== expected) throw new ContentError('内容已被更新，或标识已存在。请重新加载后再保存。', 409);
-}
-async function backup(file: string, slug: string) {
-  await atomicWrite(path.join(dataRoot(), 'history', slug, `${Date.now()}-${randomUUID()}-${path.basename(file)}`), await readFile(file));
+async function backup(file: string, slug: string, bytes: Buffer) {
+  await atomicWrite(path.join(dataRoot(), 'history', slug, `${Date.now()}-${randomUUID()}-${path.basename(file)}`), bytes, { ifAbsent: true });
 }
 export async function saveBook(slug: string, input: unknown, revision: string | null) {
   return serialized(`book:${slug}`, async () => {
     const metadata = validateMetadata(slug, input), file = path.join(bookPath(slug), 'book.json');
-    await checkRevision(file, revision);
+    const current = await maybeReadDataFile(file);
+    checkRevision(current, revision);
     if (metadata.cover) await readImage(slug, imageReference(metadata.cover, false));
-    if (revision !== null) await backup(file, slug);
-    await fs.mkdir(path.join(bookPath(slug), 'chapters'), { recursive: true });
-    await fs.mkdir(path.join(bookPath(slug), 'images'), { recursive: true });
-    await atomicWrite(file, JSON.stringify(metadata, null, 2) + '\n');
+    if (current) await backup(file, slug, current.bytes);
+    if (!isBlobStorage()) {
+      await fs.mkdir(path.join(bookPath(slug), 'chapters'), { recursive: true });
+      await fs.mkdir(path.join(bookPath(slug), 'images'), { recursive: true });
+    }
+    await atomicWrite(file, JSON.stringify(metadata, null, 2) + '\n', current ? { ifMatch: current.etag } : { ifAbsent: true });
     return readBookDocument(slug);
   });
 }
@@ -253,10 +404,11 @@ export async function saveChapter(book: string, slug: string, source: string, re
   return serialized(`book:${book}`, async () => {
     await readBookDocument(book);
     const file = path.join(bookPath(book), 'chapters', `${validateSlug(slug)}.md`);
-    await checkRevision(file, revision);
+    const current = await maybeReadDataFile(file);
+    checkRevision(current, revision);
     await renderChapter(book, slug, source);
-    if (revision !== null) await backup(file, book);
-    await atomicWrite(file, source);
+    if (current) await backup(file, book, current.bytes);
+    await atomicWrite(file, source, current ? { ifMatch: current.etag } : { ifAbsent: true });
     return readChapterDocument(book, slug);
   });
 }
@@ -264,16 +416,56 @@ export async function uploadImage(book: string, originalName: string, bytes: Buf
   return serialized(`book:${book}`, async () => {
     await readBookDocument(book);
     const name = `${randomUUID()}${path.extname(originalName).toLowerCase()}`;
-    validateImage(bytes, name);
-    await atomicWrite(path.join(bookPath(book), 'images', name), bytes);
+    const info = validateImage(bytes, name), file = path.join(bookPath(book), 'images', name);
+    await atomicWrite(file, bytes, { ifAbsent: true });
+    if (isBlobStorage()) await updateBlobImageIndex(book, name, info);
     return { name, reference: `../images/${name}`, url: imageUrl(book, name) };
   });
+}
+export async function registerUploadedImage(book: string, name: string) {
+  validateSlug(book);
+  validateImageName(name);
+  if (!isBlobStorage()) throw new ContentError('当前存储方式不支持直传图片。', 400);
+  await readBookDocument(book);
+  const file = path.join(bookPath(book), 'images', name);
+  try {
+    const asset = await readImage(book, name);
+    await updateBlobImageIndex(book, name, { width: asset.width, height: asset.height, type: asset.type });
+  } catch (error) {
+    await removeDataFile(file);
+    throw error;
+  }
+  return { name, reference: `../images/${name}`, url: imageUrl(book, name) };
+}
+async function moveBlobItems(items: BlobItem[], destination: (item: BlobItem) => string) {
+  for (let start = 0; start < items.length; start += 10) {
+    await Promise.all(items.slice(start, start + 10).map(item => copy(item.url, destination(item), {
+      access: 'private', addRandomSuffix: false,
+    })));
+  }
+  for (let start = 0; start < items.length; start += 10) {
+    await Promise.all(items.slice(start, start + 10).map(item => del(item.url, { ifMatch: item.etag })));
+  }
 }
 export async function trashContent(book: string, chapter: string | null, revision: string) {
   return serialized(`book:${book}`, async () => {
     const root = bookPath(book), file = chapter ? path.join(root, 'chapters', `${validateSlug(chapter)}.md`) : path.join(root, 'book.json');
-    await checkRevision(file, revision);
     const trash = path.join(dataRoot(), 'trash', `${Date.now()}-${randomUUID()}`, book);
+    if (isBlobStorage()) {
+      const current = await maybeReadDataFile(file);
+      checkRevision(current, revision);
+      if (chapter) {
+        const item = await head(blobPath(file));
+        await copy(item.url, blobPath(path.join(trash, `${chapter}.md`)), { access: 'private', addRandomSuffix: false });
+        await del(item.url, { ifMatch: item.etag });
+      } else {
+        const prefix = `${blobPath(root).replace(/\/$/, '')}/`, items = await listBlobItems(prefix);
+        await moveBlobItems(items, item => blobPath(path.join(trash, 'book', item.pathname.slice(prefix.length))));
+        blobImageIndexCache.delete(book);
+      }
+      return;
+    }
+    checkRevision(await maybeReadDataFile(file), revision);
     await fs.mkdir(trash, { recursive: true });
     await fs.rename(chapter ? file : root, chapter ? path.join(trash, `${chapter}.md`) : path.join(trash, 'book'));
   });

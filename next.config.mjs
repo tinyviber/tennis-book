@@ -1,4 +1,5 @@
 const basePath = process.env.BASE_PATH || '';
+const storageDriver = process.env.VERCEL === '1' ? 'vercel-blob' : (process.env.STORAGE_DRIVER || 'local');
 
 export default {
   output: process.env.BUILD_STANDALONE === 'true' ? 'standalone' : undefined,
@@ -6,7 +7,7 @@ export default {
   basePath,
   images: { unoptimized: true },
   poweredByHeader: false,
-  env: { NEXT_PUBLIC_BASE_PATH: basePath },
+  env: { NEXT_PUBLIC_BASE_PATH: basePath, NEXT_PUBLIC_STORAGE_DRIVER: storageDriver },
   outputFileTracingExcludes: {
     '/*': ['./data/**/*', './content/**/*', './out/**/*', './.env*', './public/books/**/*', './src/generated/**/*'],
   },

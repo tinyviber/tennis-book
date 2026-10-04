@@ -1,8 +1,8 @@
 # 书间 · 图文书籍阅读器
 
-Next.js 阅读网站与内容管理后台。框架代码放在 repo；书籍资料、Markdown、图片、历史版本和登录会话放在独立的数据目录。新增或修改内容时无需修改源码、提交 Git 或重新构建网站。
+Next.js 阅读网站与内容管理后台。框架代码放在 repo；书籍资料、Markdown、图片和管理状态保存在持久化存储中。新增或修改内容时无需修改源码、提交 Git 或重新构建网站。
 
-读者公开阅读；只有预先配置的管理员能管理内容。没有开放注册。当前采用单管理员账号和单 Node 实例，适合自有服务器、VPS 或挂载持久化卷的 Docker 部署。
+读者公开阅读；只有预先配置的管理员能管理内容。没有开放注册。本地和 Docker 使用文件系统；部署到 Vercel 时使用私有 Vercel Blob。
 
 ## 目录与数据边界
 
@@ -17,19 +17,19 @@ Dockerfile             只打包框架，不包含内容或凭据
 compose.yaml           框架容器 + 独立持久化数据卷
 .env.example           配置示例，可以提交
 
-data/                  运行时数据，不提交 Git；可用 DATA_DIR 指向 repo 外部
+data/                  本地和 Docker 运行时数据，不提交 Git；可用 DATA_DIR 指向 repo 外部
   books/<book>/
     book.json          书籍资料和发布状态
     chapters/*.md      章节正文和资料
     images/*           原始图片
     extraction.json    扫描裁图记录（如有）
-  auth/                会话与登录限速记录，不通过 HTTP 暴露
-  history/<book>/       覆盖保存前的旧资料和正文
-  trash/               移除的书籍或章节
+  auth/                本地和 Docker 的会话与登录限速记录，不通过 HTTP 暴露
+  history/<book>/       本地和 Docker 覆盖保存前的旧资料和正文
+  trash/               本地和 Docker 移除的书籍或章节
 .env.local             本机配置与密码哈希，不提交 Git
 ```
 
-原来的 `content/books/tennis-improvement/` 已迁到 `data/books/tennis-improvement/`，保留 47 节正文、522 幅图组与扫描裁图记录。`data/` 是现有内容的唯一运行时来源；首次把框架提交到 Git 前，请另外备份整个数据目录。Git clone 只取得框架，内容需要从备份导入。
+原来的 `content/books/tennis-improvement/` 已迁到 `data/books/tennis-improvement/`，保留 47 节正文、522 幅图组与扫描裁图记录。本地和 Docker 从 `data/` 读取运行时内容；Vercel 部署把 `data/books/` 迁入私有 Blob。首次把框架提交到 Git 前，请另外备份整个数据目录。Git clone 只取得框架，内容需要从备份或 Blob 迁入。
 
 构建不读取数据目录，也不生成 `src/generated/library.json`、`public/books/` 或静态 `out/`。页面和搜索在请求时读取当前数据；保存后的内容在读者刷新页面或重新打开搜索时生效。阅读进度、字号、主题和图片放大功能保留。
 
@@ -115,7 +115,26 @@ npm run init-data -- --from /path/to/backup/books
 
 备份请包含整个 `DATA_DIR`，以及单独妥善保存部署配置。为取得一致的快照，备份或恢复时短暂停止服务。恢复时把备份放回数据目录并重启服务即可。`history/` 保存覆盖前的原文件；`trash/<批次>/<book>/` 保存已移除的章节，整本书在该路径的 `book/` 下。恢复单个条目时，停止服务、把文件放回 `books/<book>/` 对应位置，再运行 `check-content`。历史记录和回收目录不会自动清理。
 
-密码忘记或需要轮换时，重新运行 `npm run setup-admin` 并重启服务。账号或密码哈希变化会使旧会话失效；会话有效期 12 小时，退出登录会在服务端撤销。全局账号在 15 分钟窗口内最多允许 5 次失败尝试，限速记录保存在数据目录，重启服务不会重置。
+密码忘记或需要轮换时，重新运行 `npm run setup-admin` 并重启服务。账号或密码哈希变化会使旧会话失效；会话有效期 12 小时，退出登录会在服务端撤销。全局账号在 15 分钟窗口内最多允许 5 次失败尝试。会话和限速状态保存在本地/Docker 数据目录或 Vercel Blob，重启服务不会重置。
+
+## Vercel 部署
+
+Vercel Functions 的文件系统不适合保存运行时改动。本项目在 Vercel 上把书籍资料、章节、图片、历史版本、回收内容、管理会话和登录限速状态保存到**私有 Vercel Blob**；图片由浏览器直传 Blob，并通过短时签名地址读取。函数请求体有 4.5 MB 上限，因此图片不会经过函数上传或下载。
+
+1. 在 Vercel 导入 `tinyviber/tennis-book`，使用 Next.js 默认构建设置。项目的 `.nvmrc` 为 Node.js 24；Vercel 当前默认支持 24.x。
+2. 在项目的 **Storage** 中创建并连接一个 **Private Blob** store，至少连接 Production 环境。不要把生产 Blob store 共享给可编辑内容的 Preview 部署；需要预览时给 Preview 单独连接一个私有 store。
+3. 在 Vercel 项目设置中为 Production 配置 `APP_URL`、`ADMIN_USERNAME` 和 `ADMIN_PASSWORD_HASH`。`APP_URL` 填最终访问域名的 Origin，例如 `https://books.example.com`，不要带路径。Preview 环境没有设置 `APP_URL` 时会自动使用 Vercel 提供的部署域名；如果要在 Preview 使用后台，请为其配置单独的管理员凭据和私有 Blob store。可在本机运行 `npm run setup-admin` 生成管理员配置，再把 `.env.local` 中这两个管理员变量复制到 Vercel。Blob store 会提供所需的访问凭据；`STORAGE_DRIVER` 在 Vercel 上会自动选择 Blob。
+4. 把现有书库迁入 Production Blob。安装并登录 Vercel CLI 后，在项目目录运行：
+
+   ```bash
+   vercel link
+   vercel env pull .env.local --environment=production
+   npm run migrate-vercel-blob
+   ```
+
+   脚本读取 `data/books/`，只上传书籍、章节、图片和图片尺寸索引；不会上传认证信息、会话、历史版本或回收目录。当前本地书库约 37 MB。重复运行会跳过已有对象；只有确认要用本地文件覆盖线上同名内容时才加 `--overwrite`。
+
+部署完成后，后台上传和编辑会直接写入 Blob；Vercel Function 的 4.5 MB 请求/响应限制由图片直传和签名读取绕开。更多说明见 [Vercel Blob 私有存储](https://vercel.com/docs/vercel-blob/private-storage)、[浏览器直传](https://vercel.com/docs/vercel-blob/client-upload) 和 [函数限制](https://vercel.com/docs/functions/limitations)。
 
 ## 服务器部署
 
@@ -147,7 +166,7 @@ docker compose start reader
 
 子路径部署：构建时设置 `BASE_PATH=/bookshelf`；Docker 使用上面的 `--env-file` 读取 `.env.local` 中的 `BASE_PATH`。`APP_URL` 仍填写域名的 Origin（如 `https://example.com`）。图片、搜索和管理请求会自动带上构建时的子路径。修改子路径需要重建框架。
 
-当前存储实现要求持久化磁盘和单实例运行，**不适合直接部署到 Vercel 等无持久化磁盘的平台或多副本集群**。若选择这类平台，需要把 `content-store` 和 `auth-store` 的持久化实现换成数据库/对象存储，读取页面与后台界面可以沿用。
+Vercel 使用私有 Blob 的条件写入保存编辑版本，多个函数实例可以共享书籍、会话和限速状态。其他无持久化磁盘的平台仍需提供兼容的持久化存储实现。
 
 ## 验证与来源说明
 

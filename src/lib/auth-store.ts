@@ -1,7 +1,6 @@
-import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomBytes, scrypt, timingSafeEqual } from 'node:crypto';
-import { ContentError, atomicWrite, dataRoot, isMissing, revisionOf, serialized } from './content-store';
+import { ContentError, atomicWrite, dataRoot, isMissing, listDataEntries, readDataFile, removeDataFile, revisionOf, serialized } from './content-store';
 
 const SCRYPT_OPTIONS = { N: 32768, r: 8, p: 3, maxmem: 64 * 1024 * 1024 };
 const HASH_PATTERN = /^scrypt:([a-f0-9]{32}):([a-f0-9]{128})$/;
@@ -25,7 +24,7 @@ export function authConfigured(): boolean {
   return !!process.env.ADMIN_USERNAME && HASH_PATTERN.test(process.env.ADMIN_PASSWORD_HASH || '');
 }
 export function appOrigin(): string {
-  const configured = process.env.APP_URL;
+  const configured = process.env.APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
   if (!configured) {
     if (process.env.NODE_ENV === 'production') throw new ContentError('请在服务器配置 APP_URL。', 503);
     return 'http://localhost:3000';
@@ -53,23 +52,23 @@ export async function createSession() {
   if (!authConfigured()) throw new ContentError('管理员尚未配置。', 503);
   const token = randomBytes(32).toString('hex');
   const session: Session = { username: process.env.ADMIN_USERNAME!, expiresAt: Date.now() + SESSION_SECONDS * 1000, credentialVersion: credentialVersion() };
-  await atomicWrite(path.join(authRoot(), 'sessions', `${revisionOf(token)}.json`), JSON.stringify(session));
+  await atomicWrite(path.join(authRoot(), 'sessions', `${revisionOf(token)}.json`), JSON.stringify(session), { ifAbsent: true });
   return token;
 }
 export async function readSession(token: string | undefined): Promise<Session | null> {
   if (!token || !/^[a-f0-9]{64}$/.test(token) || !authConfigured()) return null;
   const file = path.join(authRoot(), 'sessions', `${revisionOf(token)}.json`);
   let session: Session;
-  try { session = JSON.parse(await fs.readFile(file, 'utf8')); }
+  try { session = JSON.parse((await readDataFile(file)).bytes.toString('utf8')); }
   catch (error) { if (isMissing(error) || error instanceof SyntaxError) return null; throw error; }
   if (typeof session.expiresAt !== 'number' || session.expiresAt <= Date.now() || session.credentialVersion !== credentialVersion() || session.username !== process.env.ADMIN_USERNAME) {
-    await fs.rm(file, { force: true });
+    await removeDataFile(file);
     return null;
   }
   return session;
 }
 export async function revokeSession(token: string | undefined): Promise<void> {
-  if (token && /^[a-f0-9]{64}$/.test(token)) await fs.rm(path.join(authRoot(), 'sessions', `${revisionOf(token)}.json`), { force: true });
+  if (token && /^[a-f0-9]{64}$/.test(token)) await removeDataFile(path.join(authRoot(), 'sessions', `${revisionOf(token)}.json`));
 }
 // A global account limit cannot be bypassed by spoofing a forwarded IP header.
 // The counter survives restarts; checks are serialized before expensive password work.
@@ -77,22 +76,34 @@ export async function login(username: string, password: string): Promise<string>
   if (!authConfigured()) throw new ContentError('管理员尚未配置，请运行 npm run setup-admin。', 503);
   return serialized('auth:login', async () => {
     const file = path.join(authRoot(), 'login-attempts.json');
-    let state = { startedAt: Date.now(), attempts: 0 };
-    try { state = JSON.parse(await fs.readFile(file, 'utf8')); } catch (error) { if (!isMissing(error)) throw error; }
-    if (Date.now() - state.startedAt >= WINDOW_MS) state = { startedAt: Date.now(), attempts: 0 };
-    if (state.attempts >= 5) throw new ContentError('登录尝试过多，请在 15 分钟后重试。', 429);
-    state.attempts++;
-    await atomicWrite(file, JSON.stringify(state));
+    let saved = false;
+    for (let attempt = 0; attempt < 8; attempt++) {
+      let current: Awaited<ReturnType<typeof readDataFile>> | null = null;
+      try { current = await readDataFile(file); } catch (error) { if (!isMissing(error)) throw error; }
+      let state = { startedAt: Date.now(), attempts: 0 };
+      if (current) state = JSON.parse(current.bytes.toString('utf8'));
+      if (Date.now() - state.startedAt >= WINDOW_MS) state = { startedAt: Date.now(), attempts: 0 };
+      if (state.attempts >= 5) throw new ContentError('登录尝试过多，请在 15 分钟后重试。', 429);
+      state.attempts++;
+      try {
+        await atomicWrite(file, JSON.stringify(state), current ? { ifMatch: current.etag } : { ifAbsent: true });
+        saved = true;
+        break;
+      } catch (error) {
+        if (!(error instanceof ContentError && error.status === 409)) throw error;
+      }
+    }
+    if (!saved) throw new ContentError('登录状态正在被更新，请稍后重试。', 503);
     const validPassword = await verifyPassword(password, process.env.ADMIN_PASSWORD_HASH!);
     if (username !== process.env.ADMIN_USERNAME || !validPassword) throw new ContentError('用户名或密码不正确。', 401);
-    await fs.rm(file, { force: true });
+    await removeDataFile(file);
     // Remove expired or rotated sessions on successful login.
     const directory = path.join(authRoot(), 'sessions');
     try {
-      for (const name of await fs.readdir(directory)) {
-        if (!/^[a-f0-9]{64}\.json$/.test(name)) continue;
-        const session = JSON.parse(await fs.readFile(path.join(directory, name), 'utf8')) as Session;
-        if (session.expiresAt <= Date.now() || session.credentialVersion !== credentialVersion()) await fs.rm(path.join(directory, name), { force: true });
+      for (const { name, isDirectory } of await listDataEntries(directory)) {
+        if (isDirectory || !/^[a-f0-9]{64}\.json$/.test(name)) continue;
+        const session = JSON.parse((await readDataFile(path.join(directory, name))).bytes.toString('utf8')) as Session;
+        if (session.expiresAt <= Date.now() || session.credentialVersion !== credentialVersion()) await removeDataFile(path.join(directory, name));
       }
     } catch (error) { if (!isMissing(error)) throw error; }
     return createSession();
