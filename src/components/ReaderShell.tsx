@@ -51,7 +51,7 @@ export function ReaderShell({book,chapter,headings,children}:{book:BookSummary;c
     <header className="site-header reader-header">
       <button className="mobile-menu icon-button" onClick={()=>drawer.current?.showModal()} aria-label="打开全书目录"><Menu size={21}/></button>
       <Link href="/" className="wordmark">书间</Link><span className="header-divider"/><Link href="/" className="header-label">书架</Link>
-      <div className="header-actions"><button className="search-trigger" onClick={()=>setSearchOpen(true)} aria-keyshortcuts="Control+k Meta+k"><Search size={17}/><span>搜索</span></button><span className="header-divider"/><button className="type-trigger" onClick={()=>setSettingsOpen(true)} aria-label="阅读设置">Aa</button></div>
+      <div className="header-actions"><button className="search-trigger" onClick={()=>setSearchOpen(true)} aria-label="搜索" aria-keyshortcuts="Control+k Meta+k"><Search size={17}/><span>搜索</span></button><span className="header-divider"/><button className="type-trigger" onClick={()=>setSettingsOpen(true)} aria-label="阅读设置">Aa</button></div>
     </header>
     <div className="reading-progress" aria-label={`本节阅读进度 ${progress}%`}><span style={{transform:`scaleX(${progress/100})`}}/></div>
     <aside className="desktop-sidebar" ref={sidebar}><TableOfContents book={book} current={chapter}/></aside>

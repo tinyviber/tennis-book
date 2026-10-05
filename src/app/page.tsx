@@ -10,7 +10,7 @@ export default async function Shelf() {
   const books = await getBooks();
   const gitManaged = isGitContentDeployment();
   return <>
-    <header className="site-header"><Link href="/" className="wordmark">书间</Link><span className="header-divider"/><span className="header-label">书架</span>{!gitManaged && <Link className="shelf-admin" href="/admin/">内容管理</Link>}</header>
+    <header className="site-header"><Link href="/" className="wordmark">书间</Link><span className="header-divider"/><span className="header-label">书架</span><Link className="shelf-admin" href="/training/">私人训练</Link>{!gitManaged && <Link className="shelf-admin" style={{marginLeft:0}} href="/admin/">内容管理</Link>}</header>
     <main className="shelf">
       <div className="shelf-intro"><h1>书架</h1><p>书里的文字与图片，慢慢读。</p></div>
       {books.length === 0 && <p className="empty-shelf">书架还没有已发布的章节。管理员可以在内容管理中添加。</p>}

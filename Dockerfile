@@ -19,6 +19,7 @@ ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0 DAT
 RUN addgroup --system --gid 1001 reader && adduser --system --uid 1001 --ingroup reader reader && mkdir -p /data && chown reader:reader /data
 COPY --from=builder --chown=reader:reader /app/.next/standalone ./
 COPY --from=builder --chown=reader:reader /app/.next/static ./.next/static
+COPY --from=builder --chown=reader:reader /app/public ./public
 USER reader
 EXPOSE 3000
 CMD ["node", "server.js"]

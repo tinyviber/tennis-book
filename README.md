@@ -11,6 +11,7 @@ src/
   app/                 阅读页面、后台页面、受保护的写入 API
   components/          阅读器与编辑界面
   lib/content-store.ts 内容读取、校验、Markdown 渲染、保存
+  lib/runtime-store.ts 私人可变数据读写，本地文件或私有 Blob
   lib/auth-store.ts    密码哈希、会话、登录限速
 scripts/               数据导入、校验、管理员配置
 Dockerfile             只打包框架，不包含内容或凭据
@@ -23,13 +24,14 @@ data/
     chapters/*.md      章节正文和资料
     images/*           原始图片
     extraction.json    扫描裁图记录（如有）
-  auth/                本地编辑器的会话与登录限速记录，不提交 Git
+  auth/                私人会话与登录限速记录，不提交 Git
+  training/            训练状态、历史版本和私人媒体，不提交 Git
   history/<book>/      本地编辑器覆盖保存前的旧资料和正文，不提交 Git
   trash/               本地编辑器移除的书籍或章节，不提交 Git
 .env.local             本机配置与密码哈希，不提交 Git
 ```
 
-`data/books/` 包含《网球进阶》《网球运动系统训练》《网球步法》和《网球压力训练》。克隆仓库即可取得完整书库；Vercel 部署从同一目录读取书籍和章节。管理登录、历史版本和回收内容属于本地运行状态，不会提交到 GitHub。
+`data/books/` 包含《网球进阶》《网球运动系统训练》《网球步法》和《网球压力训练》。克隆仓库即可取得完整书库；Vercel 部署从同一目录读取书籍和章节。登录会话、私人训练状态和媒体、历史版本和回收内容不会提交到 GitHub；书籍内容与这些可变记录使用独立的存储模块。
 
 页面和搜索在请求时读取仓库中的书籍资料。Vercel 构建会把已发布书籍的图片复制为静态资源，并生成图片尺寸索引；章节和书籍资料由 Next.js 服务读取。网站仍需要 Node.js 服务，不能使用旧的 `out/` 静态导出。
 
@@ -43,7 +45,7 @@ npm run setup-admin
 npm run dev
 ```
 
-`setup-admin` 会交互式询问用户名和密码，密码不回显，至少 12 个字符；仅把密码哈希写入 `.env.local`。这只用于本地管理后台。Vercel 上不启用登录或在线编辑。
+`setup-admin` 会交互式询问用户名和密码，密码不回显，至少 12 个字符；仅把密码哈希写入 `.env.local`。本地书库管理与私人训练共用该账号。Vercel 书库只读；若另行开启线上私人训练，仍需要私人账号与持久化运行存储。
 
 打开 [书架](http://localhost:3000/) 或本地 [管理后台](http://localhost:3000/admin/)。默认 `APP_URL=http://localhost:3000`；如果使用其他端口或访问地址，请同步修改 `APP_URL`，否则后台会拒绝不同来源的写入请求。
 
@@ -59,6 +61,8 @@ npm start
 `npm run preview` 同样启动 Next.js 生产服务。网站已改为需要 Node 后端的应用，不能使用旧的 `out/` 静态导出或旧静态服务器部署。
 
 ## 管理内容
+
+私人网球训练入口为 `/training/`，与本地管理后台共用账号，训练资料与四册书分开保存。包含录像复盘、当前练习任务、健身记录导入和每周预算排期；可选开启影像 AI 与浏览器姿态参考。使用、导入格式、备份范围和配置见 [私人训练说明](docs/private-training.md)。
 
 本地运行时可以在 `/admin/` 添加书籍，填写书籍标识（如 `tennis-notes`）和书名。新书默认是草稿。保存会修改 `data/books/` 下的仓库文件；推送这些改动后，Vercel 会部署更新后的书籍。
 
@@ -114,17 +118,19 @@ npm run init-data -- --from /path/to/backup/books
 
 备份请包含整个 `DATA_DIR`，以及单独妥善保存部署配置。为取得一致的快照，备份或恢复时短暂停止服务。恢复时把备份放回数据目录并重启服务即可。`history/` 保存覆盖前的原文件；`trash/<批次>/<book>/` 保存已移除的章节，整本书在该路径的 `book/` 下。恢复单个条目时，停止服务、把文件放回 `books/<book>/` 对应位置，再运行 `check-content`。历史记录和回收目录不会自动清理。
 
-密码忘记或需要轮换时，重新运行 `npm run setup-admin` 并重启本地服务。账号或密码哈希变化会使旧会话失效；会话有效期 12 小时，退出登录会在服务端撤销。全局账号在 15 分钟窗口内最多允许 5 次失败尝试。会话和限速状态保存在本地/Docker 数据目录。
+密码忘记或需要轮换时，重新运行 `npm run setup-admin` 并重启本地服务。账号或密码哈希变化会使旧会话失效；会话有效期 12 小时，退出登录会在服务端撤销。全局账号在 15 分钟窗口内最多允许 5 次失败尝试。会话和限速状态保存在本地/Docker 数据目录，或线上私人训练连接的私有 Blob；书库始终从 Git 文件读取。
 
 ## Vercel 部署
 
-书籍内容和图片已经在 GitHub 仓库中，无需创建 Blob，也无需添加 Vercel 环境变量。线上内容只读；在 GitHub 改动并推送后，Vercel 会重新构建部署。
+书籍内容和图片跟随 GitHub 仓库部署；仅阅读书库无需创建 Blob，也无需添加内容环境变量。线上内容只读；在 GitHub 改动并推送后，Vercel 会重新构建部署。
 
 1. 在 Vercel 导入 `tinyviber/tennis-book`，使用 Next.js 默认构建设置。
 2. 点击部署。仓库中的 `data/books/` 会随项目构建；Vercel 不需要 Blob store、管理员变量或内容迁移步骤。
 3. 更新书籍时，修改 GitHub 上 `data/books/<书籍标识>/` 中的 `book.json`、`chapters/*.md` 或 `images/`，提交改动。也可以在本地编辑后运行 `npm run check-content`，再提交并推送。Vercel 会在推送后自动部署。
 
-部署版 `/admin/` 只展示内容更新说明，所有写入接口都会拒绝修改。管理员后台只用于本地开发。
+部署版 `/admin/` 只展示内容更新说明，所有书库管理接口都会拒绝修改。本地后台保存书籍后，需要提交并推送到 GitHub 才会更新线上阅读版。
+
+`/training/` 是独立的私人功能，不会将记录上传到书库。若需要在 Vercel 使用可保存的私人训练，请连接一个 **Private Blob** store，并配置 `ADMIN_USERNAME`、`ADMIN_PASSWORD_HASH` 与 `APP_URL`。这些配置只用于私人身份、录像和训练记录，不再用于书籍内容。没有设置账号时显示配置提示，书库照常可读。Vercel 函数文件系统只读，不能用临时目录代替私人记录的持久化存储。Production 与 Preview 使用独立的私人 store 和账号，避免预览写入日常记录。可选 AI 另需 `OPENAI_API_KEY`；不配置时人工流程仍可用。
 
 ## 服务器部署
 
@@ -156,7 +162,7 @@ docker compose start reader
 
 子路径部署：构建时设置 `BASE_PATH=/bookshelf`；Docker 使用上面的 `--env-file` 读取 `.env.local` 中的 `BASE_PATH`。`APP_URL` 仍填写域名的 Origin（如 `https://example.com`）。图片、搜索和管理请求会自动带上构建时的子路径。修改子路径需要重建框架。
 
-Vercel 从 GitHub 部署快照读取书籍文件。线上修改内容需要创建新的 Git 提交并触发部署；本地与 Docker 编辑继续使用文件系统。
+Vercel 从 GitHub 部署快照读取书籍文件。线上书库更新需要创建新的 Git 提交并触发部署；本地与 Docker 编辑继续使用文件系统。私人的身份和训练状态由 `runtime-store.ts` 独立持久化，不在静态内容或 Git 文件中保存。
 
 ## 验证与来源说明
 

@@ -9,7 +9,7 @@ export default {
   poweredByHeader: false,
   env: { NEXT_PUBLIC_BASE_PATH: basePath },
   outputFileTracingExcludes: {
-    '/*': ['./data/auth/**/*', './data/history/**/*', './data/trash/**/*', './data/imports/**/*', './data/books/**/images/**/*', './out/**/*', './.env*', './public/books/**/*', './src/generated/**/*'],
+    '/*': ['./data/auth/**/*', './data/training/**/*', './data/history/**/*', './data/trash/**/*', './data/imports/**/*', './data/books/**/images/**/*', './out/**/*', './.env*', './public/books/**/*', './src/generated/**/*'],
   },
   ...(isVercel ? { outputFileTracingIncludes: { '/*': ['./data/books/*/book.json', './data/books/*/chapters/*.md', './data/books/*/image-index.json'] } } : {}),
   async headers() {

@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/prepare-pose-assets.mjs",
     "dev": "next dev",
-    "prebuild": "node scripts/prepare-vercel-content.mjs",
+    "prebuild": "node scripts/prepare-vercel-content.mjs && node scripts/prepare-pose-assets.mjs",
     "build": "next build --webpack",
     "postbuild": "node scripts/clean-standalone.mjs",
     "start": "next start",
@@ -19,7 +20,11 @@
   "dependencies": {
     "@fontsource-variable/noto-sans-sc": "^5.2.9",
     "@fontsource-variable/noto-serif-sc": "^5.2.8",
+    "@mediapipe/tasks-vision": "0.10.32",
     "@next/env": "^16.3.8",
+    "@vercel/blob": "^2.8.0",
+    "csv-parse": "7.0.3",
+    "gifenc": "1.0.3",
     "gray-matter": "4.0.3",
     "image-size": "2.0.4",
     "lucide-react": "1.51.0",

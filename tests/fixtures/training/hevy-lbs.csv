@@ -1,0 +1,5 @@
+title,start_time,end_time,description,exercise_title,superset_id,exercise_notes,set_index,set_type,weight_lbs,reps,distance_miles,duration_seconds,rpe
+"Upper ""A""","4 Oct 2026, 18:30:00","4 Oct 2026, 19:00:00","First line,
+second line","Dumbbell row",,"Keep shoulder steady",0,normal,22.0462262185,12,0,0,7
+"Upper ""A""","4 Oct 2026, 18:30:00","4 Oct 2026, 19:00:00","First line,
+second line","Walk",,,1,normal,0,0,1,600,

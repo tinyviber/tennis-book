@@ -22,3 +22,13 @@ export async function requireAdminPage() {
   if (!session) redirect('/admin/login/');
   return session;
 }
+
+/** Git book deployments are immutable; private training uses the same login independently. */
+export async function requireBookAdmin(request?: Request) {
+  if (isGitContentDeployment()) throw new ContentError('线上书籍只读，请在 GitHub 仓库的 data/books 中修改内容并推送。', 403);
+  return requireAdmin(request);
+}
+export async function requireBookAdminPage() {
+  if (isGitContentDeployment()) redirect('/admin/login/');
+  return requireAdminPage();
+}

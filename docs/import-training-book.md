@@ -11,7 +11,7 @@
 - `data/books/tennis-system-training/image-repairs.json`：生成图的参考来源、提示词、输入输出哈希与核对记录。
 - `data/imports/tennis-system-training/`：保留位置的原始OCR、人工核对的裁图计划、文字修正、表格转写、原索引数字和生成图，供重建阅读版使用。
 
-`data/books/`中的阅读版书籍会提交到Git；`data/imports/`中的原始OCR、校对材料和图片生成记录由Git忽略，应单独备份。克隆仓库可以取得完整阅读版，但不能重建这本书的导入过程。原PDF保持不变。
+`data/books/` 中的阅读版内容和插图跟随 GitHub 仓库提交；`data/imports/`、原始扫描和人工核对输入继续忽略并另行备份。克隆仓库可取得阅读版，但不能据此重新 OCR 或重建。原 PDF 保持不变。
 
 ## 排版与校对方法
 
@@ -52,8 +52,8 @@ swiftc scripts/ocr-scanned-pages.swift -o /tmp/tennis-ocr
 
 OCR工具跳过已有JSON，需重新识别时先使用新的输出目录。文字识别不能代替图文阅读顺序核验；本书裁图计划和人工表格转写针对这个特定扫描版本。
 
-## Vercel部署
+## Vercel 书库部署
 
-部署会从Git提交中读取`data/books/`。重新导入这本书后，运行`npm run check-content`，检查变更并提交、推送；Vercel 会自动部署新的书籍内容。线上站点只读，不需要Blob或迁移脚本。`data/imports/`不会部署，仍需本地备份。具体步骤见[README](../README.md#vercel-部署)。
+阅读版 JSON、Markdown 和插图保存在 GitHub 的 `data/books/`。校验后提交并推送，Vercel 构建会准备静态图片和图片尺寸索引，无需上传书库到 Blob 或设置内容凭据。线上书库只读；私人的训练记录与媒体不属于书库，不会随这些文件公开。`data/imports/` 仍需本地备份。具体说明见 [README](../README.md#vercel-部署)。
 
 跨书整合的后续编辑方案见[新手版提案](beginner-edition-plan.md)。原书阅读版与未来整合版应分别保留。

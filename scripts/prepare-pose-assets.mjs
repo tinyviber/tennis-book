@@ -1,0 +1,10 @@
+import { mkdir, copyFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const source = path.join(root, 'node_modules', '@mediapipe', 'tasks-vision');
+const target = path.join(root, 'public', 'training-vision');
+await mkdir(path.join(target, 'wasm'), { recursive: true });
+await copyFile(path.join(root, 'node_modules', 'gifenc', 'dist', 'gifenc.esm.js'), path.join(target, 'gifenc.js'));
+await copyFile(path.join(source, 'vision_bundle.cjs'), path.join(target, 'vision_bundle.js'));
+for (const file of ['wasm/vision_wasm_internal.js', 'wasm/vision_wasm_internal.wasm', 'wasm/vision_wasm_nosimd_internal.js', 'wasm/vision_wasm_nosimd_internal.wasm']) await copyFile(path.join(source, file), path.join(target, file));

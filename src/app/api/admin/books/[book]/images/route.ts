@@ -1,10 +1,10 @@
-import { requireAdmin } from '@/lib/server-auth';
+import { requireBookAdmin } from '@/lib/server-auth';
 import { ContentError, MAX_IMAGE_BYTES, uploadImage } from '@/lib/content-store';
 import { handle, json, limitedBody } from '@/lib/api';
 export const runtime = 'nodejs';
 export async function POST(request: Request, { params }: { params: Promise<{ book: string }> }) {
   return handle(async () => {
-    await requireAdmin(request);
+    await requireBookAdmin(request);
     if (!request.headers.get('content-type')?.startsWith('multipart/form-data')) throw new ContentError('请上传图片文件。', 415);
     const bytes = await limitedBody(request, MAX_IMAGE_BYTES + 8192);
     let form;

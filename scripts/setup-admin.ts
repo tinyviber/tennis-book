@@ -1,9 +1,10 @@
 import './env';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { createInterface } from 'node:readline/promises';
 import { hashPassword } from '../src/lib/auth-store';
-import { atomicWrite, isMissing } from '../src/lib/content-store';
+import { isMissing } from '../src/lib/content-store';
 async function hiddenPassword(prompt: string): Promise<string> {
   if (!process.stdin.isTTY || !process.stdout.isTTY) throw new Error('请在交互式终端运行此命令，密码不会回显。');
   process.stdout.write(prompt); process.stdin.setRawMode(true); process.stdin.resume();
@@ -41,7 +42,12 @@ async function main() {
     const line = `${key}=${value}`, pattern = new RegExp(`^(?:export\\s+)?${key}=.*$`, 'gm');
     env = pattern.test(env) ? env.replace(pattern, line) : env.trimEnd() + '\n' + line + '\n';
   }
-  await atomicWrite(file, env);
+  // Credentials configure this process; they must stay local even when books use Blob.
+  const temporary = `${file}.${randomUUID()}.tmp`;
+  try {
+    await fs.writeFile(temporary, env, { mode: 0o600, flag: 'wx' });
+    await fs.rename(temporary, file);
+  } finally { await fs.rm(temporary, { force: true }); }
   console.log('已将管理员用户名和密码哈希写入 .env.local。请重启服务使配置生效；旧会话会自动失效。');
 }
 main().catch(error => { console.error(error.message); process.exitCode = 1; });
