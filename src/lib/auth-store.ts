@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { randomBytes, scrypt, timingSafeEqual } from 'node:crypto';
-import { ContentError, atomicWrite, dataRoot, isMissing, listDataEntries, readDataFile, removeDataFile, revisionOf, serialized } from './content-store';
+import { ContentError, atomicWrite, dataRoot, isGitContentDeployment, isMissing, listDataEntries, readDataFile, removeDataFile, revisionOf, serialized } from './content-store';
 
 const SCRYPT_OPTIONS = { N: 32768, r: 8, p: 3, maxmem: 64 * 1024 * 1024 };
 const HASH_PATTERN = /^scrypt:([a-f0-9]{32}):([a-f0-9]{128})$/;
@@ -21,7 +21,7 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
   return timingSafeEqual(await derive(password, match[1]), Buffer.from(match[2], 'hex'));
 }
 export function authConfigured(): boolean {
-  return !!process.env.ADMIN_USERNAME && HASH_PATTERN.test(process.env.ADMIN_PASSWORD_HASH || '');
+  return !isGitContentDeployment() && !!process.env.ADMIN_USERNAME && HASH_PATTERN.test(process.env.ADMIN_PASSWORD_HASH || '');
 }
 export function appOrigin(): string {
   const configured = process.env.APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
@@ -52,7 +52,7 @@ export async function createSession() {
   if (!authConfigured()) throw new ContentError('管理员尚未配置。', 503);
   const token = randomBytes(32).toString('hex');
   const session: Session = { username: process.env.ADMIN_USERNAME!, expiresAt: Date.now() + SESSION_SECONDS * 1000, credentialVersion: credentialVersion() };
-  await atomicWrite(path.join(authRoot(), 'sessions', `${revisionOf(token)}.json`), JSON.stringify(session), { ifAbsent: true });
+  await atomicWrite(path.join(authRoot(), 'sessions', `${revisionOf(token)}.json`), JSON.stringify(session));
   return token;
 }
 export async function readSession(token: string | undefined): Promise<Session | null> {
@@ -86,7 +86,7 @@ export async function login(username: string, password: string): Promise<string>
       if (state.attempts >= 5) throw new ContentError('登录尝试过多，请在 15 分钟后重试。', 429);
       state.attempts++;
       try {
-        await atomicWrite(file, JSON.stringify(state), current ? { ifMatch: current.etag } : { ifAbsent: true });
+        await atomicWrite(file, JSON.stringify(state));
         saved = true;
         break;
       } catch (error) {

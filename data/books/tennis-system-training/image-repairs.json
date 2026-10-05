@@ -1,0 +1,13 @@
+[
+  {
+    "model": "Image-2",
+    "sourcePdfPage": 175,
+    "sourcePrintedPage": 171,
+    "source": "figure-175-02-original.webp",
+    "sourceSha256": "e33f52024faa9269f72f864b678176ba3af2bbf6b4a1cfe3369a941cd76932ae",
+    "output": "figure-175-02-clear.png",
+    "outputSha256": "9fdd8a4e1ef1f77c511023290acc42db67fddfcac4b8fd3a129e8755a7573024",
+    "prompt": "Use case: scientific-educational scan restoration. Edit target: the attached low-contrast screenshot from a tennis training book. Create a clean, high-resolution faithful restoration of THIS exact court diagram for an ebook. Remove the paper texture, blur, gray haze, and reverse-page bleed-through; use a pure white background and crisp dark-gray/black lines. Preserve the diagram geometry, aspect ratio, ALL line positions, the same two black dots and dashed net at the bottom, and the positions of P and digits 1, 2, 3, 4, 5 exactly as in the reference. Do not rotate or mirror it. Do not add arrows, court zones, colors, exercises, figures, or technical claims. The top edge is the baseline; P is centered at the top, 1 is to its left and 5 to its right; 2 labels the left diagonal, 3 labels the central vertical and 4 labels the right diagonal. Keep those numbers and the P label in a legible sans-serif font. Caption text verbatim: 十字交叉步法训练的场地设置. Only improve legibility, preserve the instructional meaning and layout exactly.",
+    "review": "Checked against original: geometry, P, 1–5, dots and caption preserved."
+  }
+]

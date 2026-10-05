@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { upload as uploadBlob } from '@vercel/blob/client';
 import type { BookMetadata, ChapterDocument, EditorBook } from '@/lib/types';
 import { publicPath } from '@/lib/urls';
 import { adminRequest } from './client';
@@ -87,22 +86,8 @@ export function BookEditor({ initial, firstChapter }: { initial: EditorBook; fir
     if (!file) return;
     void run(async () => {
       if (file.size > 10 * 1024 * 1024) throw new Error('图片不能超过 10 MB。');
-      let image: { name: string };
-      if (process.env.NEXT_PUBLIC_STORAGE_DRIVER === 'vercel-blob') {
-        const extension = file.name.match(/\.(webp|png|jpe?g|gif)$/i)?.[0].toLowerCase();
-        if (!extension) throw new Error('请使用 WebP、PNG、JPEG 或 GIF 图片。');
-        const name = `${crypto.randomUUID()}${extension}`;
-        const pathname = `books/${bookSlug}/images/${name}`;
-        const blob = await uploadBlob(pathname, file, {
-          access: 'private',
-          handleUploadUrl: publicPath(`${base}images/`),
-        });
-        if (blob.pathname !== pathname) throw new Error('图片上传路径不正确。');
-        image = await adminRequest<{ name: string }>(`${base}images/${name}/`, { method: 'POST' });
-      } else {
-        const data = new FormData(); data.append('file', file);
-        image = await adminRequest<{ name: string }>(`${base}images/`, { method: 'POST', body: data });
-      }
+      const data = new FormData(); data.append('file', file);
+      const image = await adminRequest<{ name: string }>(`${base}images/`, { method: 'POST', body: data });
       setBook(current => ({ ...current, images: [image.name, ...current.images] }));
       insertImage(image.name, file.name.replace(/\.[^.]+$/, ''));
       setMessage('图片已上传并插入正文，保存章节后生效。');

@@ -7,8 +7,13 @@ public/books/
 __pycache__/
 *.py[cod]
 .DS_Store
-data/
 content/
+/data/*
+!/data/books/
+/data/books/*
+!/data/books/**/
+!/data/books/**
+/data/books/*/image-index.json
 .env*
 !.env.example
 .vercel/

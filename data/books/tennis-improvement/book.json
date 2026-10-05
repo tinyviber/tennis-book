@@ -1,0 +1,16 @@
+{
+  "slug": "tennis-improvement",
+  "title": "网球提升",
+  "subtitle": "基础技巧与实战策略",
+  "description": "从握拍与基础击球，到球场规则、比赛战术与双打配合。",
+  "authors": [
+    "约翰·利特尔福德",
+    "安德鲁·马格拉斯"
+  ],
+  "translator": "张妍妍",
+  "publisher": "人民邮电出版社",
+  "isbn": "978-7-115-37789-0",
+  "language": "zh-CN",
+  "cover": "./images/cover.webp",
+  "sourceNote": "正文来自扫描识别，尚未逐字校对。插图保留原书中的动作、箭头和标注。"
+}
